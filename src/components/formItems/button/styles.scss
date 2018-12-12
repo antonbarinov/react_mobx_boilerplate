@@ -1,0 +1,22 @@
+.button {
+  padding: 10px 15px;
+  display: inline-block;
+  margin-right: 10px;
+  color: #ffffff;
+  background: #5b5492;
+  cursor: pointer;
+  transition: opacity .3s ease;
+  user-select: none;
+
+  &:hover {
+    opacity: .8;
+  }
+
+  &:active {
+    box-shadow: inset 0px 0px 15px #1c1138;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}

@@ -1,0 +1,34 @@
+.inputContainer {
+  height: 70px;
+
+  & > input {
+    padding: 10px 15px;
+    display: block;
+    width: 100%;
+    border: 1px #c7c7c7 solid;
+    outline: none;
+
+    transition: border-color .3s ease;
+  }
+
+  .msg {
+    color: red;
+    margin-top: 3px;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: opacity .3s ease;
+  }
+
+  &.error {
+    & > input {
+      border-color: red;
+    }
+
+    .msg {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
