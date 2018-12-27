@@ -13,6 +13,7 @@ export default class LayoutHeader extends React.Component {
                         <AuthorizedOnlyLink to="/profile" styleName="link">Profile</AuthorizedOnlyLink>
                         <NotAuthorizedOnlyLink to="/login" styleName="link">Login</NotAuthorizedOnlyLink>
                         <Link to="/" styleName="link">Main</Link>
+                        <Link to="/github" styleName="link">Github</Link>
                         { userState.user &&
                             <span styleName="link" onClick={() => userState.logout()}>Logout</span>
                         }

@@ -9,6 +9,7 @@ import LoginPage from './pages/login';
 import NotFoundPage from './pages/notFound';
 import SignUpPage from './pages/signup';
 import ProfilePage from './pages/profile';
+import GithubPage from './pages/github';
 
 
 export default class Routes extends React.Component {
@@ -19,6 +20,7 @@ export default class Routes extends React.Component {
                 <Route path="/" exact component={MainPage}/>
                 <Route path="/login" exact component={LoginPage}/>
                 <Route path="/signup" exact component={SignUpPage} />
+                <Route path="/github" exact component={GithubPage}/>
                 <PrivateRoute path="/profile" exact component={ProfilePage} />
                 <Route component={NotFoundPage}/>
             </Switch>

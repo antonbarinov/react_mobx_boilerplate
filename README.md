@@ -16,6 +16,7 @@
 - Profile page
 - Main page
 - Logout
+- Example page with Github repositories and users search using it's API
 
 ## Run
 ```
