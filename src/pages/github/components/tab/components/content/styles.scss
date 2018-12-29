@@ -4,6 +4,11 @@
   a {
     color: #0366d6;
     font-size: 20px;
+    transition: opacity .3s ease;
+
+    &:hover {
+      opacity: .7;
+    }
   }
 }
 
