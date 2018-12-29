@@ -48,6 +48,10 @@
       height: 100%;
       align-items: center;
       z-index: 2;
+
+      &:hover {
+        color: red;
+      }
     }
   }
 
