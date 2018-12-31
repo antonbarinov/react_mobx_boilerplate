@@ -20,6 +20,10 @@
     &:hover {
       opacity: 0.7;
     }
+
+    &[data-active="active"] {
+      text-decoration: underline;
+    }
   }
 
   .tbl {
