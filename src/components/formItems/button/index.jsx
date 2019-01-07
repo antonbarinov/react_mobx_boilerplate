@@ -5,15 +5,16 @@ import CSSModules from 'react-css-modules';
 
 @observer
 @CSSModules(require('./styles.scss'), { allowMultiple: true })
-export default class FormButton extends React.Component {
+class FormButton extends React.Component {
     render() {
-        let props = { ...this.props };
-        delete props.setRef;
+        let { innerRef, ...props } = this.props;
 
         return (
-            <div styleName="button" {...props} ref={this.props.setRef}>
-                {this.props.children}
+            <div styleName="button" {...props} ref={innerRef}>
+                {props.children}
             </div>
         );
     }
 }
+
+export default React.forwardRef((props, ref) => <FormButton innerRef={ref} {...props}/>);

@@ -36,7 +36,7 @@ class FormValidator {
     validationFieldParams(fieldName) {
         return {
             msg: this.component.state.validationFields[fieldName].msg,
-            setRef: this.component.inputRefs[fieldName],
+            ref: this.component.inputRefs[fieldName],
         };
     }
 

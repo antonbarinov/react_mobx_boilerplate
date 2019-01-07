@@ -5,23 +5,20 @@ import CSSModules from 'react-css-modules';
 
 @observer
 @CSSModules(require('./styles.scss'), { allowMultiple: true })
-export default class FormInput extends React.Component {
+class FormInput extends React.Component {
     render() {
-        let props = { ...this.props };
-        delete props.msg;
-        delete props.setRef;
+        let { msg, innerRef, ...props } = this.props;
 
         let classesStr = [ 'inputContainer' ];
-        if (this.props.msg) classesStr.push('error');
-
-        let msg = this.props.msg || '';
-
+        if (msg) classesStr.push('error');
 
         return (
             <div styleName={classesStr.join(' ')}>
-                <input {...props} ref={this.props.setRef}/>
+                <input {...props} ref={innerRef}/>
                 <div styleName="msg">{msg}</div>
             </div>
         );
     }
 }
+
+export default React.forwardRef((props, ref) => <FormInput innerRef={ref} {...props}/>);
