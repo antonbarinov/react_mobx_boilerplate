@@ -5,6 +5,6 @@ module.exports = {
         'postcss-cssnext': {
             warnForDuplicates: false
         },
-        'cssnano': {}
+        //'cssnano': {}
     }
 };

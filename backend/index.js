@@ -54,8 +54,10 @@ app.post('/signup', (req, res) => {
 
         res.send({
             status: 'OK',
-            accessToken,
-            user,
+            data: {
+                accessToken,
+                user,
+            }
         });
     }
 });
@@ -68,8 +70,10 @@ app.post('/login', (req, res) => {
 
         res.send({
             status: 'OK',
-            accessToken: user.accessToken,
-            user,
+            data: {
+                accessToken: user.accessToken,
+                user,
+            }
         });
     } else {
         res.status(400);
@@ -108,4 +112,4 @@ function authOnlyMiddleware(req, res, next) {
 }
 
 
-app.listen(3001);
+app.listen(3010);

@@ -1,18 +1,34 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import CSSModules from 'react-css-modules';
-import state from './state';
+import { observable } from 'mobx';
+import Container from 'components/container';
 
 
 @observer
-@CSSModules(require('./styles.scss'))
 export default class MainPage extends React.Component {
-    render() {
+    @observable time = new Date();
+    updateInterval = null;
+
+    constructor(props) {
+        super(props);
+
+        document.title = 'Main Page | Boilerplate';
+
+        this.updateInterval = setInterval(() => {
+            this.time = new Date();
+        }, 100);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.updateInterval);
+    }
+
+    render () {
         return (
-            <div className="container">
+            <Container>
                 <h1>Main page</h1>
-                Time is: <b styleName="time">{state.time}</b>
-            </div>
-        );
+                <div>This time is {this.time.toISOString()}</div>
+            </Container>
+        )
     }
 }

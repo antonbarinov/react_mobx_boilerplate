@@ -1,49 +1,52 @@
 import * as React from 'react';
-import CSSModules from 'react-css-modules';
 import { Link, Route, withRouter } from 'react-router-dom';
-import userState from 'globalStates/user';
+import { observer } from 'mobx-react';
+import userState from 'globalState/user';
 
+import styles from './styles.module.scss';
 
 @withRouter
-@CSSModules(require('./styles.scss'))
+@observer
 export default class LayoutHeader extends React.Component {
     render() {
+        const { user } = userState;
+
         return (
-            <header styleName="header">
-                <div styleName="tbl">
-                    <div styleName="tbc">
-                        <AuthorizedOnlyLink to="/profile" styleName="link">Profile</AuthorizedOnlyLink>
-                        <NotAuthorizedOnlyLink to="/login" styleName="link">Login</NotAuthorizedOnlyLink>
-                        <CustomLink to="/" styleName="link">Main</CustomLink>
-                        <CustomLink to="/github" styleName="link">Github</CustomLink>
-                        { userState.user &&
-                            <span styleName="link" onClick={() => userState.logout()}>Logout</span>
-                        }
-                    </div>
-                </div>
+            <header className={ styles.header }>
+                <AuthorizedOnlyLink to="/profile">Profile</AuthorizedOnlyLink>
+                <NotAuthorizedOnlyLink to="/login">Login</NotAuthorizedOnlyLink>
+                <CustomLink to="/">Main</CustomLink>
+                { user &&
+                <span className={ styles.link } onClick={ () => userState.logout() }>Logout</span>
+                }
             </header>
         );
     }
 }
 
-function AuthorizedOnlyLink({ children, user, ...rest}) {
+const AuthorizedOnlyLink = observer(({ children, ...rest }) => {
+    const { user } = userState;
     if (!user) return null;
-    return <CustomLink {...rest}>{children}</CustomLink>;
-}
+    return <CustomLink { ...rest }>{ children }</CustomLink>;
+});
 
-function NotAuthorizedOnlyLink({ children, user, ...rest}) {
+const NotAuthorizedOnlyLink = observer(({ children, ...rest }) => {
+    const { user } = userState;
     if (user) return null;
-    return <CustomLink {...rest}>{children}</CustomLink>;
-}
+    return <CustomLink { ...rest }>{ children }</CustomLink>;
+});
 
-function CustomLink({ children, to, ...rest }) {
+function CustomLink({ children, to, className, ...rest }) {
+    const stylesStr = [ styles.link ];
+    if (className) stylesStr.push(className);
+
     return (
         <Route
-            path={to}
+            path={ to }
             exact
-            children={({ match }) => (
-                <Link to={to} {...rest} data-active={match ? "active" : ""}>{children}</Link>
-            )}
+            children={ ({ match }) => (
+                <Link to={ to } { ...rest } className={ stylesStr.join(' ') } data-active={ match ? 'active' : '' }>{ children }</Link>
+            ) }
         />
     );
 }

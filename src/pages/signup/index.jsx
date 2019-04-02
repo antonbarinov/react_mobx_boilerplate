@@ -1,40 +1,40 @@
 import * as React from 'react';
-import CSSModules from 'react-css-modules';
-import userState from 'globalStates/user';
+import userState from 'globalState/user';
+import FormValidator from 'helpers/formValidator';
 import FormInput from 'components/formItems/input';
 import FormButton from 'components/formItems/button';
 import FormServerErrors from 'components/formItems/serverErrors';
-import FormValidator from 'helpers/formValidator';
 import { helperRedirect } from '../../helpers/redirect';
 import { Link } from 'react-router-dom';
 
+import styles from './styles.module.scss';
+import Container from 'components/container';
 
 
-@CSSModules(require('./styles.scss'))
 export default class SignUpPage extends React.Component {
-    constructor() {
-        super();
+    state = {
+        validationFields: {
+            login: { msg: false },
+            password: { msg: false },
+            full_name: { msg: false },
+        },
+        serverError: null,
+    };
 
-        this.state = {
-            validationFields: {
-                login: { msg: false, },
-                password: { msg: false },
-                full_name: { msg: false },
-            },
-            serverError: null,
-        };
+    inputRefs = {
+        login: React.createRef(),
+        password: React.createRef(),
+        full_name: React.createRef(),
+    };
 
-        this.inputRefs = {
-            login: React.createRef(),
-            password: React.createRef(),
-            full_name: React.createRef(),
-        };
+    constructor(props) {
+        super(props);
 
         this.fv = new FormValidator(this);
     }
 
     // Validate form and submit
-    async validateAndSubmit() {
+    validateAndSubmit = async () => {
         // Validate login
         this.fv.validateField('login', (val) => {
             if (val.length < 3) return `Login must contain not less than 3 symbols`;
@@ -63,7 +63,8 @@ export default class SignUpPage extends React.Component {
                 // Success
                 helperRedirect('/profile');
             }
-        } catch (e) {
+        }
+        catch (e) {
             this.setState({
                 serverError: e.message,
             });
@@ -72,17 +73,20 @@ export default class SignUpPage extends React.Component {
 
     render() {
         return (
-            <div className="container">
+            <Container className={styles.container}>
                 <h1>Sign up</h1>
                 <div>
-                    <FormInput placeholder="Full name" {...this.fv.validationFieldParams('full_name')} />
-                    <FormInput placeholder="Login" {...this.fv.validationFieldParams('login')} />
-                    <FormInput placeholder="Password" type="password" {...this.fv.validationFieldParams('password')} />
-                    <FormServerErrors msg={this.state.serverError} />
-                    <FormButton onClick={this.validateAndSubmit.bind(this)}>Sign up</FormButton>
-                    <div styleName="underBtnText">Already have account? <Link to="/login">Login</Link> instead</div>
+                    <FormInput placeholder="Full name" { ...this.fv.validationFieldParams('full_name') } />
+                    <FormInput placeholder="Login" { ...this.fv.validationFieldParams('login') } />
+                    <FormInput placeholder="Password"
+                               type="password" { ...this.fv.validationFieldParams('password') } />
+                    <FormServerErrors msg={ this.state.serverError } />
+                    <FormButton onClick={ this.validateAndSubmit }>Sign up</FormButton>
+                    <div className={ styles.underBtnText }>
+                        Already have account? <Link to="/login">Login</Link> instead
+                    </div>
                 </div>
-            </div>
+            </Container>
         );
     }
 }

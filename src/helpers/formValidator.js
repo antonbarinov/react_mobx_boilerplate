@@ -1,4 +1,4 @@
-import * as React from "react";
+import { observable } from 'mobx';
 
 class FormValidator {
     component = {};
@@ -26,7 +26,8 @@ class FormValidator {
 
         if (result === true || result === undefined) {
             state.validationFields[fieldName].msg = false;
-        } else {
+        }
+        else {
             state.validationFields[fieldName].msg = result;
         }
 
@@ -51,5 +52,6 @@ class FormValidator {
     }
 
 }
+
 
 export default FormValidator;

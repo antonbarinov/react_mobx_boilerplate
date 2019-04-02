@@ -1,0 +1,18 @@
+.footer {
+    position: relative;
+    margin-top: -100px;
+    height: 100px;
+    color: rgba(255, 255, 255, 0.87);
+    text-decoration: none;
+    clear: both;
+    background-color: #673ab7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    a {
+        color: #5f6f81;
+        text-decoration: none;
+    }
+
+}

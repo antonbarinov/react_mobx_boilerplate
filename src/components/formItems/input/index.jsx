@@ -1,24 +1,19 @@
 import * as React from 'react';
-import { observer } from 'mobx-react';
-import CSSModules from 'react-css-modules';
+
+import styles from './styles.module.scss';
 
 
-@observer
-@CSSModules(require('./styles.scss'), { allowMultiple: true })
-class FormInput extends React.Component {
-    render() {
-        let { msg, innerRef, ...props } = this.props;
+function FormInput({ msg, innerRef, ...props }) {
+    let classesStr = [ styles.inputContainer ];
+    if (msg) classesStr.push(styles.error);
 
-        let classesStr = [ 'inputContainer' ];
-        if (msg) classesStr.push('error');
-
-        return (
-            <div styleName={classesStr.join(' ')}>
-                <input {...props} ref={innerRef}/>
-                <div styleName="msg">{msg}</div>
-            </div>
-        );
-    }
+    return (
+        <div className={ classesStr.join(' ') }>
+            <input { ...props } ref={ innerRef } />
+            <div className={ styles.msg }>{ msg }</div>
+        </div>
+    );
 }
 
-export default React.forwardRef((props, ref) => <FormInput innerRef={ref} {...props}/>);
+
+export default React.forwardRef((props, ref) => <FormInput innerRef={ ref } { ...props } />);

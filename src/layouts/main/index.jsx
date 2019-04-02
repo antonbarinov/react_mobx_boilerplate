@@ -1,24 +1,41 @@
 import * as React from 'react';
+import { observer } from 'mobx-react';
 import Header from './header';
 import Footer from './footer';
-import userState from 'globalStates/user';
 
-import './main.css';
-import { observer } from 'mobx-react'; // Basic styles
+import userState from 'globalState/user';
 
-@observer
-export default class Layout extends React.Component {
-    render() {
+import styles from './styles.module.scss';
+
+const Layout = observer(({ children, ...restParams }) => {
+    const { initialFetching } = userState;
+
+    const renderContent = () => {
+        if (initialFetching) return null;
+
+        // Hide preloader
+        document.getElementById('preloader').classList.add('hidden');
+
         return (
-            <span data-user-token={userState.user ? userState.user.accessToken : false}>
-                <div id="wrap">
-                    <Header/>
-                    <div id="main">
-                        {this.props.children}
+            <React.Fragment>
+                <div className={ styles.wrap }>
+                    <Header />
+                    <div className={ styles.main }>
+                        { React.cloneElement(children, restParams) }
                     </div>
                 </div>
-                <Footer/>
-            </span>
+                <Footer />
+            </React.Fragment>
         );
-    }
-}
+    };
+
+
+    return (
+        <span>
+            {renderContent()}
+        </span>
+    );
+});
+
+
+export default Layout;

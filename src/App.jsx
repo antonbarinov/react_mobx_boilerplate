@@ -1,18 +1,13 @@
 import * as React from 'react';
-import { hot } from 'react-hot-loader'
+import { BrowserRouter as Router } from 'react-router-dom';
+
 import Routes from './Routes';
-import Layout from './layouts/main';
 
 
-//import DevTools from 'mobx-react-devtools';
-class App extends React.Component {
-    render() {
-        return (
-            <Layout>
-                <Routes/>
-            </Layout>
-        );
-    }
+export default function App() {
+    return (
+        <Router>
+            <Routes />
+        </Router>
+    );
 }
-
-export default hot(module)(App);

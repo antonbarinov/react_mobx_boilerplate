@@ -1,15 +1,15 @@
-import { fetch } from 'whatwg-fetch';
-import userState from 'globalStates/user';
+import axios from 'axios';
+import userState from 'globalState/user';
 
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'http://localhost:3010';
+
 
 class apiRequest {
     __unifyErrorsHandler = true;
     __method = 'GET';
     __url = '/';
     __options = {
-        credentials: 'include',
         headers: {},
     };
     __data = null;
@@ -32,10 +32,10 @@ class apiRequest {
         return this;
     }
 
-    options (options = {}) {
+    options(options = {}) {
         this.__options = {
             ...this.options,
-            ...options
+            ...options,
         };
 
         return this;
@@ -44,39 +44,58 @@ class apiRequest {
     async __send() {
         let options = {
             ...this.__options,
-            method: this.__method
+            method: this.__method,
         };
-        if (this.__data !== null) options.body = this.__data;
+        if (this.__data !== null) options.data = this.__data;
 
         const userAccessToken = getUserAccessToken();
         if (userAccessToken) options.headers['Authorization'] = userAccessToken;
 
         let baseUrl = window.API_BASE_URL || API_BASE_URL;
-        const url = baseUrl + this.__url;
+        options.url = baseUrl + this.__url;
 
         let response;
 
-        response = await fetch(url, options);
+        let error;
 
-        if (response.status >= 200 && response.status < 300) {
-            let resp = await response.json(); // we have JSON api
-            if (resp.data) resp = resp.data;
-            return resp;
+        try {
+            response = await axios(options);
+        } catch (e) {
+            error = e;
+            response = e.response;
+        } finally {
+
         }
-        else if (response.status === 401) {
+
+        /**
+         * Not authorized
+         */
+        if (response.status === 401) {
             userState.logout();
         }
-        else {
-            const resp = await response.json();
-            const msg = resp.message || response.statusText;
 
-            let error = new Error(msg);
-            error.response = response;
+        /**
+         * Success
+         */
+        if (response.status >= 200 && response.status < 300) {
+            let resp = response.data;
+
+            resp.getData = () => {
+                return resp.data || resp.Data;
+            };
+
+            return resp;
+        }
+        /**
+         * Errors
+         */
+        else {
+            error.message = (response.data && response.data.message) || error.message;
 
             if (!this.__unifyErrorsHandler) throw error;
 
+            // Universal error handling here
             console.error(error);
-            // Any default error catching behavior
 
             throw error;
         }
@@ -86,7 +105,7 @@ class apiRequest {
         this.__data = JSON.stringify(data);
 
         this.__options.headers = {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         };
 
         return this.__send();
@@ -99,10 +118,10 @@ class apiRequest {
     }
 }
 
-function getUserAccessToken() {
+
+export function getUserAccessToken() {
     return window.localStorage.getItem('accessToken');
 }
-
 
 
 export default apiRequest;
