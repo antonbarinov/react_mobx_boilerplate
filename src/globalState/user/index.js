@@ -53,7 +53,7 @@ class User {
         if (respData.accessToken) {
             window.localStorage.setItem('accessToken', respData.accessToken);
 
-            await this.fetchMe().catch(console.error);
+            await this.fetchMe();
         }
         // Something wrong here
         else {
@@ -70,7 +70,7 @@ class User {
 
         if (respData.accessToken) {
             window.localStorage.setItem('accessToken', respData.accessToken);
-            await this.fetchMe().catch(console.error);
+            await this.fetchMe();
         }
         // Something wrong here
         else {
