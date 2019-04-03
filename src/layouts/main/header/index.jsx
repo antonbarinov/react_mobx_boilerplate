@@ -5,6 +5,7 @@ import userState from 'globalState/user';
 
 import styles from './styles.module.scss';
 
+
 @withRouter
 @observer
 export default class LayoutHeader extends React.Component {
