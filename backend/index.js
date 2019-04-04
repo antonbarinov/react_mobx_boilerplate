@@ -26,9 +26,9 @@ app.use((req, res, next) => {
     req.user = false;
 
     if (req.headers.authorization) {
-       let user = users.filter(u => req.headers.authorization === u.accessToken);
-       user = user.length ? user[0] : false;
-       req.user = user;
+        let user = users.filter(u => req.headers.authorization === u.accessToken);
+        user = user.length ? user[0] : false;
+        req.user = user;
     }
 
     next();
@@ -40,14 +40,22 @@ app.post('/signup', (req, res) => {
     if (filtered.length) {
         res.status(400);
         res.send({
-           status: 'FAIL',
-           message: `User with this login already exist`
+            status: 'FAIL',
+            message: `User with this login already exist`,
+            errorType: 'validation',
+            errors: [
+                {
+                    field: 'login',
+                    message: 'User with this login already exist',
+                },
+            ],
         });
-    } else {
+    }
+    else {
         const accessToken = getRandomHash();
         const user = {
             ...data,
-            accessToken
+            accessToken,
         };
 
         users.push(user);
@@ -57,7 +65,7 @@ app.post('/signup', (req, res) => {
             data: {
                 accessToken,
                 user,
-            }
+            },
         });
     }
 });
@@ -73,13 +81,21 @@ app.post('/login', (req, res) => {
             data: {
                 accessToken: user.accessToken,
                 user,
-            }
+            },
         });
-    } else {
+    }
+    else {
         res.status(400);
         res.send({
             status: 'FAIL',
-            message: `Invalid login or password`
+            message: `Invalid login or password`,
+            errorType: 'validation',
+            errors: [
+                {
+                    field: 'login',
+                    message: 'Invalid login or password',
+                },
+            ],
         });
     }
 });
@@ -87,7 +103,7 @@ app.post('/login', (req, res) => {
 app.get('/me', authOnlyMiddleware, (req, res) => {
     res.send({
         status: 'OK',
-        data: req.user
+        data: req.user,
     });
 });
 
@@ -95,8 +111,8 @@ app.get('/me', authOnlyMiddleware, (req, res) => {
 function getRandomHash(algo = 'sha1') {
     const secret = new Date() + Math.random().toString() + Math.random().toString() + Math.random().toString();
     return crypto.createHmac(algo, secret)
-        .update(new Date().getTime().toString() + Math.random().toString() + Math.random().toString())
-        .digest('hex');
+                 .update(new Date().getTime().toString() + Math.random().toString() + Math.random().toString())
+                 .digest('hex');
 }
 
 function authOnlyMiddleware(req, res, next) {
@@ -104,9 +120,10 @@ function authOnlyMiddleware(req, res, next) {
         res.status(401);
         res.send({
             status: 'FAIL',
-            message: 'Unauthorized'
+            message: 'Unauthorized',
         });
-    } else {
+    }
+    else {
         next();
     }
 }

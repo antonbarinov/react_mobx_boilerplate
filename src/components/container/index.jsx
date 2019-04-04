@@ -1,9 +1,9 @@
 import * as React from 'react';
+import { observer } from 'mobx-react';
 
 import styles from './styles.module.scss';
 
-
-export default function Container({ children, className, ...props }) {
+const Container = observer(({ children, className, ...props }) => {
     const stylesStr = [ styles.container ];
     if (className) stylesStr.push(className);
 
@@ -12,4 +12,6 @@ export default function Container({ children, className, ...props }) {
             { children }
         </div>
     );
-}
+});
+
+export default Container;

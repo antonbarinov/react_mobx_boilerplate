@@ -1,57 +1,58 @@
-import { observable } from 'mobx';
+export default class FormValidator {
+    isFormValid = true;
+    formFields = {};
 
-class FormValidator {
-    component = {};
-
-    constructor(component) {
-        this.component = component;
+    constructor(formFields) {
+        this.formFields = formFields;
     }
 
-    getFields() {
-        let result = {};
-        const state = this.component.state;
-        const inputRefs = this.component.inputRefs;
+    static createFormFieldObj() {
+        return {
+            value: '',
+            errorMessage: '',
+        };
+    }
 
-        for (let fieldName in state.validationFields) {
-            result[fieldName] = inputRefs[fieldName].current.value;
+    applyServerValidationErrors(response) {
+        let result = false;
+        // Validation errors
+        if (response.errorType === 'validation') {
+            if (Array.isArray(response.errors)) {
+                for (const { field, message } of response.errors) {
+                    if (this.formFields[field]) {
+                        this.formFields[field].errorMessage = message;
+                    }
+                }
+
+                result = true;
+            }
         }
 
         return result;
     }
 
-    validateField(fieldName, validationFunction) {
-        let state = { ...this.component.state };
-        const value = this.component.inputRefs[fieldName].current.value;
-        const result = validationFunction(value);
-
-        if (result === true || result === undefined) {
-            state.validationFields[fieldName].msg = false;
+    async validateField(fieldObject = {}, validationFunction) {
+        const { value } = fieldObject;
+        const result = await validationFunction(value);
+        if (result !== undefined) {
+            fieldObject.errorMessage = result;
+            this.isFormValid = false;
         }
-        else {
-            state.validationFields[fieldName].msg = result;
-        }
-
-        this.component.setState(state);
-    }
-
-    validationFieldParams(fieldName) {
-        return {
-            msg: this.component.state.validationFields[fieldName].msg,
-            ref: this.component.inputRefs[fieldName],
-        };
     }
 
     isFieldsValid() {
-        let isValid = true;
-        const state = this.component.state;
-        for (let fieldName in state.validationFields) {
-            if (state.validationFields[fieldName].msg) isValid = false;
-        }
-
-        return isValid;
+        return this.isFormValid;
     }
 
+    getFieldsData() {
+        let result = {};
+
+        for (let fieldName in this.formFields) {
+            if (this.formFields.hasOwnProperty(fieldName)) {
+                result[fieldName] = this.formFields[fieldName].value;
+            }
+        }
+
+        return result;
+    }
 }
-
-
-export default FormValidator;
