@@ -11,7 +11,7 @@ export function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-export function arrayChucnk(array = [], chunkSize = 2) {
+export function arrayChunck(array = [], chunkSize = 2) {
     let result = [];
     let i, j;
     for (i = 0, j = array.length; i < j; i += chunkSize) {
