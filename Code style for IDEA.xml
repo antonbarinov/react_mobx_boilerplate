@@ -16,6 +16,7 @@
     <option name="SPACES_WITHIN_IMPORTS" value="true" />
     <option name="USE_CHAINED_CALLS_GROUP_INDENTS" value="true" />
     <option name="SPACES_WITHIN_INTERPOLATION_EXPRESSIONS" value="true" />
+    <option name="IMPORT_PREFER_ABSOLUTE_PATH" value="TRUE" />
   </JSCodeStyleSettings>
   <codeStyleSettings language="HTML">
     <option name="WRAP_ON_TYPING" value="1" />
