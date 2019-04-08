@@ -6,7 +6,7 @@ import FormValidator from 'helpers/formValidator';
 import FormInput from 'components/formItems/input';
 import FormButton from 'components/formItems/button';
 import FormServerErrors from 'components/formItems/serverErrors';
-import { helperRedirect } from '../../helpers/redirect';
+import { helperRedirect } from 'helpers/redirect';
 import { Link } from 'react-router-dom';
 
 import styles from './styles.module.scss';
