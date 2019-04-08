@@ -1,6 +1,7 @@
 export default class FormValidator {
     isFormValid = true;
     formFields = {};
+    serverErrorMessage = '';
 
     constructor(formFields) {
         this.formFields = formFields;
@@ -26,6 +27,10 @@ export default class FormValidator {
 
                 result = true;
             }
+        }
+        // Text error from server
+        else if (response.errorType === 'message') {
+            this.serverErrorMessage = this.serverErrorMessage = response.errors[0].message;
         }
 
         return result;

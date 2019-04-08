@@ -62,7 +62,7 @@ export default class LoginPage extends React.Component {
         }
         catch (e) {
             const errorsParsed = fv.applyServerValidationErrors(e.response.data);
-            if (!errorsParsed) this.serverError = e.message;
+            if (!errorsParsed) this.serverError = fv.serverErrorMessage || e.message;
         }
     };
 
