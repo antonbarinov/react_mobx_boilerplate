@@ -42,6 +42,8 @@ export default class FormValidator {
         if (result !== undefined) {
             fieldObject.errorMessage = result;
             this.isFormValid = false;
+        } else {
+            fieldObject.errorMessage = '';
         }
     }
 

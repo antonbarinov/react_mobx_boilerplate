@@ -6,5 +6,5 @@
       "checkJs": true
     },
     "exclude": [],
-    "include": [ "node_mobules" ]
+    "include": [ "node_mobules", "./src" ]
   }
