@@ -30,7 +30,7 @@ export default class FormValidator {
         }
         // Text error from server
         else if (response.errorType === 'message') {
-            this.serverErrorMessage = this.serverErrorMessage = response.errors[0].message;
+            this.serverErrorMessage = response.errors[0].message;
         }
 
         return result;
