@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { Route as ReactRouterRoute, Switch, Redirect, withRouter } from 'react-router-dom';
 import userState from 'globalState/user';
 
 import { setHistory } from './helpers/redirect';
@@ -19,7 +19,7 @@ import AuthLayout from 'layouts/auth';
 export default class Routes extends React.Component {
     render() {
         return <React.Fragment>
-            <Route component={ HistorySetter } />
+            <ReactRouterRoute component={ HistorySetter } />
             <Switch>
                 <Route path="/" exact><MainLayout><MainPage /></MainLayout></Route>
                 <Route path="/login" exact><AuthLayout><LoginPage /></AuthLayout></Route>
@@ -51,6 +51,16 @@ const PrivateRoute = observer(({ children, ...rest }) => {
     };
 
     return (
-        <Route { ...rest } render={renderFunc} />
+        <ReactRouterRoute { ...rest } render={renderFunc} />
+    );
+});
+
+const Route = observer(({ children, ...rest }) => {
+    const renderFunc = (props) => {
+        return React.cloneElement(children, props);
+    };
+
+    return (
+        <ReactRouterRoute { ...rest } render={renderFunc} />
     );
 });
