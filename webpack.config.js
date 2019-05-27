@@ -7,7 +7,8 @@ const p = require('./package.json');
 
 const path = require('path');
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
-const dev = process.env.NODE_ENV !== 'production';
+const NODE_ENV = process.env.NODE_ENV;
+const dev = NODE_ENV !== 'production';
 const hashType = dev ? '[hash]' : '[contenthash]';
 
 let devPlugins = [];
@@ -172,6 +173,7 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             PRODUCTION: dev === false,
+            NODE_ENV,
         }),
         new HtmlWebpackPlugin({
             template: 'index.html',

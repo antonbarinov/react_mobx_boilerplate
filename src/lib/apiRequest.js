@@ -2,7 +2,21 @@ import axios from 'axios';
 import userState from 'globalState/user';
 
 
-const API_BASE_URL = 'http://localhost:3010';
+let API_BASE_URL = 'http://localhost:3010';
+
+// Environment api path
+if (NODE_ENV === 'production') {
+    API_BASE_URL = 'http://localhost:3010';
+}
+else if (NODE_ENV === 'staging') {
+    API_BASE_URL = 'http://localhost:3010';
+}
+
+function getDataHandler(resp) {
+    return () => {
+        return resp.data || resp.Data;
+    };
+}
 
 
 class apiRequest {
@@ -13,6 +27,7 @@ class apiRequest {
         headers: {},
     };
     __data = null;
+    __onUploadProgress = false;
 
     constructor(url = 'GET /', unifyErrorsHandler = true) {
         this.__unifyErrorsHandler = unifyErrorsHandler;
@@ -24,10 +39,16 @@ class apiRequest {
     qs(params = {}) {
         const esc = encodeURIComponent;
         const query = Object.keys(params)
-            .map(k => esc(k) + '=' + esc(params[k]))
-            .join('&');
+                            .map(k => esc(k) + '=' + esc(params[k]))
+                            .join('&');
 
         this.__url += (this.__url.indexOf('?') === -1 ? '?' : '&') + query;
+
+        return this;
+    }
+
+    onUploadProgress(func) {
+        this.__onUploadProgress = func;
 
         return this;
     }
@@ -54,16 +75,26 @@ class apiRequest {
         let baseUrl = window.API_BASE_URL || API_BASE_URL;
         options.url = baseUrl + this.__url;
 
+        // Upload progress
+        options.onUploadProgress = (progressEvent) => {
+            let uploadPercentage = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total));
+            if (typeof this.__onUploadProgress === 'function') {
+                this.__onUploadProgress(uploadPercentage);
+            }
+        };
+
         let response;
 
         let error;
 
         try {
             response = await axios(options);
-        } catch (e) {
+        }
+        catch (e) {
             error = e;
             response = e.response;
-        } finally {
+        }
+        finally {
 
         }
 
@@ -80,9 +111,7 @@ class apiRequest {
         if (response.status >= 200 && response.status < 300) {
             let resp = response.data;
 
-            resp.getData = () => {
-                return resp.data || resp.Data;
-            };
+            resp.getData = getDataHandler(resp);
 
             return resp;
         }
