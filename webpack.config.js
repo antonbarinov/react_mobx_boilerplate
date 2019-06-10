@@ -173,7 +173,7 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({
             PRODUCTION: dev === false,
-            NODE_ENV,
+            NODE_ENV: JSON.stringify(NODE_ENV),
         }),
         new HtmlWebpackPlugin({
             template: 'index.html',
