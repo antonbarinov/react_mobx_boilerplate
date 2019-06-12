@@ -7,7 +7,7 @@ import FormButton from 'components/formItems/button';
 import FormServerErrors from 'components/formItems/serverErrors';
 import FormValidator from 'helpers/formValidator';
 import Container from 'components/container';
-import { helperRedirect } from 'helpers/redirect';
+import { helperRedirect, smartRedirect } from 'helpers/redirect';
 import { Link } from 'react-router-dom';
 
 import styles from './styles.module.scss';
@@ -57,7 +57,7 @@ export default class LoginPage extends React.Component {
             let result = await userState.login(data);
             if (result) {
                 // Success
-                helperRedirect('/profile');
+                smartRedirect('/profile');
             }
         }
         catch (e) {

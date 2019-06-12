@@ -44,6 +44,8 @@ const PrivateRoute = observer(({ children, ...rest }) => {
     const renderFunc = (props) => {
         if (initialFetching === true || user) return React.cloneElement(children, props);
 
+        window.localStorage.setItem('redirect', window.location.pathname + window.location.search);
+
         return <Redirect to={ {
             pathname: '/login',
             state: { from: props.location },
