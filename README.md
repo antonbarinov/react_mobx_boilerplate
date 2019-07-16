@@ -5,7 +5,7 @@
 - MobX 5+
 - React-MobX 5+
 - Webpack 4+
-- React Router 4+
+- Custom reactive and user friendly MobX based router
 - Authorization
 - Forms validation helpers
 - Real API requests to backend

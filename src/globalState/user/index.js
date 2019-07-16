@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx';
-import { sleep } from 'helpers/misc';
 import apiRequest, { getUserAccessToken } from 'lib/apiRequest';
 
 
@@ -16,8 +15,6 @@ class User {
     @action
     async fetchMe() {
         const accessToken = getUserAccessToken();
-
-        await sleep(1000); // For testing preloader in main layout
 
         try {
             if (accessToken) {

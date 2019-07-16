@@ -7,8 +7,8 @@ import FormButton from 'components/formItems/button';
 import FormServerErrors from 'components/formItems/serverErrors';
 import FormValidator from 'helpers/formValidator';
 import Container from 'components/container';
-import { helperRedirect, smartRedirect } from 'helpers/redirect';
-import { Link } from 'react-router-dom';
+import { smartRedirect } from 'helpers/redirect';
+import { Link } from 'components/router';
 
 import styles from './styles.module.scss';
 

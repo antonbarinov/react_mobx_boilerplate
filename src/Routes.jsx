@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Route as ReactRouterRoute, Switch, Redirect, withRouter } from 'react-router-dom';
+import { autorun, observable } from 'mobx';
+import { currentRoute, redirect, Router } from 'components/router';
 import userState from 'globalState/user';
 
-import { setHistory } from './helpers/redirect';
 
 import MainPage from './pages/main';
 import LoginPage from './pages/login';
@@ -13,56 +13,53 @@ import ProfilePage from './pages/profile';
 import MainLayout from 'layouts/main';
 import AuthLayout from 'layouts/auth';
 
+const authorizationRoutes = {
+    '/login': <AuthLayout><LoginPage /></AuthLayout>,
+    '/signup': <AuthLayout><SignUpPage /></AuthLayout>,
+};
 
-@withRouter
+
 @observer
 export default class Routes extends React.Component {
     render() {
-        return <React.Fragment>
-            <ReactRouterRoute component={ HistorySetter } />
-            <Switch>
-                <Route path="/" exact><MainLayout><MainPage /></MainLayout></Route>
-                <Route path="/login" exact><AuthLayout><LoginPage /></AuthLayout></Route>
-                <Route path="/signup" exact><AuthLayout><SignUpPage /></AuthLayout></Route>
-
-                <PrivateRoute path="/profile"><MainLayout><ProfilePage /></MainLayout></PrivateRoute>
-
-                <Route><MainLayout><NotFoundPage /></MainLayout></Route>
-            </Switch>
-        </React.Fragment>;
+        return <Router global routes={ {
+            '/': <MainLayout><MainPage /></MainLayout>,
+            '/page/:page': <MainLayout><MainPage /></MainLayout>,
+            ...authorizationRoutes,
+            '/profile': <PrivateRoute><MainLayout><ProfilePage /></MainLayout></PrivateRoute>,
+            '': <MainLayout><NotFoundPage /></MainLayout>,
+        } } />;
     }
 }
 
-function HistorySetter({ history }) {
-    setHistory(history);
-    return null;
+
+@observer
+class PrivateRoute extends React.Component {
+    @observable component = null;
+
+    constructor(props) {
+        super(props);
+
+        autorun(() => {
+            this.autoRunReactiveHandler();
+        });
+    }
+
+    autoRunReactiveHandler = () => {
+        const { children } = this.props;
+        const { initialFetching, user } = userState;
+
+        if (initialFetching === true || user) {
+            this.component = children;
+        }
+        else {
+            window.localStorage.setItem('redirect', currentRoute.fullPath);
+            redirect('/login');
+            this.component = null;
+        }
+    };
+
+    render() {
+        return this.component;
+    }
 }
-
-const PrivateRoute = observer(({ children, ...rest }) => {
-    const { initialFetching, user } = userState;
-
-    const renderFunc = (props) => {
-        if (initialFetching === true || user) return React.cloneElement(children, props);
-
-        window.localStorage.setItem('redirect', window.location.pathname + window.location.search);
-
-        return <Redirect to={ {
-            pathname: '/login',
-            state: { from: props.location },
-        } } />;
-    };
-
-    return (
-        <ReactRouterRoute { ...rest } render={renderFunc} />
-    );
-});
-
-const Route = observer(({ children, ...rest }) => {
-    const renderFunc = (props) => {
-        return React.cloneElement(children, props);
-    };
-
-    return (
-        <ReactRouterRoute { ...rest } render={renderFunc} />
-    );
-});

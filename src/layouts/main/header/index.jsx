@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { Link, Route, withRouter } from 'react-router-dom';
+import { Link } from 'components/router';
 import { observer } from 'mobx-react';
 import userState from 'globalState/user';
 
 import styles from './styles.module.scss';
 
 
-@withRouter
 @observer
 export default class LayoutHeader extends React.Component {
     render() {
@@ -17,6 +16,8 @@ export default class LayoutHeader extends React.Component {
                 <AuthorizedOnlyLink to="/profile">Profile</AuthorizedOnlyLink>
                 <NotAuthorizedOnlyLink to="/login">Login</NotAuthorizedOnlyLink>
                 <CustomLink to="/">Main</CustomLink>
+                <CustomLink to="/page/2" exact>Main (page 2)</CustomLink>
+                <CustomLink to="/page/3" exact>Main (page 3)</CustomLink>
                 { user &&
                 <span className={ styles.link } onClick={ () => userState.logout() }>Logout</span>
                 }
@@ -41,13 +42,5 @@ function CustomLink({ children, to, className, ...rest }) {
     const stylesStr = [ styles.link ];
     if (className) stylesStr.push(className);
 
-    return (
-        <Route
-            path={ to }
-            exact
-            children={ ({ match }) => (
-                <Link to={ to } { ...rest } className={ stylesStr.join(' ') } data-active={ match ? 'active' : '' }>{ children }</Link>
-            ) }
-        />
-    );
+    return <Link to={ to } { ...rest } className={ stylesStr.join(' ') }>{ children }</Link>
 }

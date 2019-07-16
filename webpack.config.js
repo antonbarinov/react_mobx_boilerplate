@@ -16,15 +16,6 @@ let prodPlugins = [];
 if (dev) devPlugins = [];
 if (!dev) {
     prodPlugins = [
-        new CleanWebpackPlugin([ 'dist' ]),
-        // This plugin copies individual
-        // files or entire directories to the build directory
-        new CopyWebpackPlugin([
-            {
-                from: './src/assets',
-                to: './assets',
-            },
-        ]),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
@@ -178,6 +169,13 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'index.html',
         }),
+        new CleanWebpackPlugin([ 'dist' ]),
+        new CopyWebpackPlugin([
+            {
+                from: './src/assets',
+                to: './assets',
+            },
+        ]),
         ...devPlugins,
         ...prodPlugins,
     ],

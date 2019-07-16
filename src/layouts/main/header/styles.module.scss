@@ -23,7 +23,7 @@
             opacity: 0.7;
         }
 
-        &[data-active="active"] {
+        &[data-active="true"] {
             text-decoration: underline;
         }
     }
