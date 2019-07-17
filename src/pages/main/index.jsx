@@ -24,7 +24,7 @@ export default class MainPage extends React.Component {
         clearInterval(this.updateInterval);
     }
 
-    render () {
+    render() {
         const { routeParams } = currentRoute;
         const { page } = routeParams;
 
@@ -32,8 +32,8 @@ export default class MainPage extends React.Component {
             <Container>
                 <h1>Main page</h1>
                 { page && <h3>Route param "page": { page }</h3> }
-                <div>This time is {this.time.toISOString()}</div>
+                <div>This time is { this.time.toISOString() }</div>
             </Container>
-        )
+        );
     }
 }

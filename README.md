@@ -1,9 +1,9 @@
 # React.js + MobX boilerplate
 
 ## Main features
-- React 16+
+- React 16.8+
 - MobX 5+
-- React-MobX 5+
+- React-MobX 6+
 - Webpack 4+
 - Custom reactive and user friendly MobX based router
 - Authorization

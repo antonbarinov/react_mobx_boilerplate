@@ -88,6 +88,8 @@ export class Router extends React.Component {
         const { routes, global } = this.props;
         let result = routes[''] || null;
 
+        let isRouteChanged = false;
+
         for (const route in routes) {
             if (!routes.hasOwnProperty(route)) continue;
 
@@ -99,17 +101,22 @@ export class Router extends React.Component {
             const res = exec(regexp, currentRoute.currentLocation.path, keys);
 
             if (res) {
+                // Does route actually changed?
+                if (regexp + '' !== currentRoute.currentRegExp + '') {
+                    isRouteChanged = true;
+                }
+
                 // Set global route params only from global router, not from local
                 if (global) {
                     currentRoute.routeParams = res;
-                    currentRoute.currentRegExp = regexp;
+                    if (isRouteChanged) currentRoute.currentRegExp = regexp;
                 }
                 result = component;
                 break;
             }
         }
 
-        this.currentComponent = result;
+        if (isRouteChanged) this.currentComponent = result;
     }
 
     render() {
