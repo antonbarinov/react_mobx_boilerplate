@@ -75,13 +75,18 @@ export const currentRoute = new CurrentRoute();
 @observer
 export class Router extends React.Component {
     @observable currentComponent = null;
+    autoRunDispose;
 
     constructor(props) {
         super(props);
 
-        autorun(() => {
+        this.autoRunDispose = autorun(() => {
             this.navigate();
         });
+    }
+
+    componentWillUnmount() {
+        this.autoRunDispose();
     }
 
     navigate() {
@@ -134,13 +139,18 @@ export class Router extends React.Component {
 @observer
 export class Link extends React.Component {
     @observable active = false;
+    autoRunDispose;
 
     constructor(props) {
         super(props);
 
-        autorun(() => {
+        this.autoRunDispose = autorun(() => {
             this.calcActive();
         });
+    }
+
+    componentWillUnmount() {
+        this.autoRunDispose();
     }
 
     handleClick = (e) => {

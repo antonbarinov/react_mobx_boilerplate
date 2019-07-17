@@ -36,13 +36,18 @@ export default class Routes extends React.Component {
 @observer
 class PrivateRoute extends React.Component {
     @observable component = null;
+    autoRunDispose;
 
     constructor(props) {
         super(props);
 
-        autorun(() => {
+        this.autoRunDispose = autorun(() => {
             this.autoRunReactiveHandler();
         });
+    }
+
+    componentWillUnmount() {
+        this.autoRunDispose();
     }
 
     autoRunReactiveHandler = () => {

@@ -11,6 +11,14 @@ export default class ReactClassComponent extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+
+    }
+
+    componentWillUnmount() {
+
+    }
+
     render() {
         return (
             <div className={ styles.ComponentName }>
