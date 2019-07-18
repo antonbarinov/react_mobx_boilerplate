@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { observable, reaction } from 'mobx';
 import Container from 'components/container';
-import { currentRoute } from 'components/router';
+import { currentRoute, Router } from 'components/router';
 
 
 @observer
@@ -24,7 +24,7 @@ export default class MainPage extends React.Component {
             () => {
                 console.log('now hash is:', currentRoute.currentLocation.location.hash);
             },
-            { fireImmediately: true },
+            { fireImmediately: true, delay: 1 },
         ));
 
         this.updateInterval = setInterval(() => {
@@ -49,6 +49,10 @@ export default class MainPage extends React.Component {
                 <div>This time is { this.time.toISOString() }</div>
                 <div>Hash: { currentLocation.location.hash }</div>
                 <div>searchParams: { JSON.stringify(searchParams) }</div>
+
+                <Router routes={ {
+                    '/page/:p': <div>Matching <b>/page/:p</b> route</div>,
+                } } />
             </Container>
         );
     }

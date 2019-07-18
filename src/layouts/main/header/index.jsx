@@ -21,6 +21,7 @@ export default class LayoutHeader extends React.Component {
                 <CustomLink to="/page/1?foo=bar" exact>Page 1</CustomLink>
                 <CustomLink to="/page/2?a=b" exact>Page 2</CustomLink>
                 <CustomLink to="/qweqweewq/3">Page not found</CustomLink>
+                <CustomLink to="/profile" exact dontIgnoreHash>Private route</CustomLink>
                 { user &&
                 <span className={ styles.link } onClick={ () => userState.logout() }>Logout</span>
                 }

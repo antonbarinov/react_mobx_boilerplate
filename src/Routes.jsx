@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { autorun, observable } from 'mobx';
+import { reaction } from 'mobx';
 import { currentRoute, redirect, Router } from 'components/router';
 import userState from 'globalState/user';
 
@@ -35,36 +35,45 @@ export default class Routes extends React.Component {
 
 @observer
 class PrivateRoute extends React.Component {
-    @observable component = null;
-    autoRunDispose;
+    reactionDisposers = [];
 
     constructor(props) {
         super(props);
 
-        this.autoRunDispose = autorun(() => {
-            this.autoRunReactiveHandler();
-        });
+        this.reactionDisposers.push(reaction(
+            () => {
+                const { children } = this.props;
+                const { initialFetching, user } = userState;
+
+                return [
+                    children,
+                    initialFetching,
+                    user,
+                ];
+            },
+            () => {
+                this.reactionHandler();
+            }));
+
+        this.reactionHandler();
     }
 
     componentWillUnmount() {
-        this.autoRunDispose();
+        this.reactionDisposers.forEach(d => d());
     }
 
-    autoRunReactiveHandler = () => {
-        const { children } = this.props;
+    reactionHandler = () => {
         const { initialFetching, user } = userState;
 
-        if (initialFetching === true || user) {
-            this.component = children;
-        }
-        else {
+        const doRedirect = (initialFetching === true || user) === false;
+
+        if (doRedirect) {
             window.localStorage.setItem('redirect', currentRoute.fullPath);
             redirect('/login');
-            this.component = null;
         }
     };
 
     render() {
-        return this.component;
+        return this.props.children;
     }
 }
