@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { autorun, observable } from 'mobx';
+import { observable, reaction } from 'mobx';
 import pathToRegexp from 'path-to-regexp';
 
 function exec(re, str, keys = []) {
@@ -35,12 +35,23 @@ class CurrentRoute {
     @observable currentLocation = {
         path: '',
         fullPath: '',
-        location: {},
+        location: {
+            hash: '',
+            host: '',
+            hostname: '',
+            href: '',
+            origin: '',
+            pathname: '',
+            port: '',
+            protocol: '',
+            search: '',
+        },
     };
     @observable fullPath = window.location.pathname + window.location.search;
     @observable routeParams = {};
-    @observable currentRegExp = null;
-
+    @observable.ref currentRegExp = null;
+    @observable searchParams = {};
+    prevLocation = null;
 
     constructor() {
         this.setCurrentRoute();
@@ -48,9 +59,21 @@ class CurrentRoute {
 
     setCurrentRoute() {
         const windowLocation = JSON.parse(JSON.stringify(window.location));
+        if (this.prevLocation === JSON.stringify(windowLocation)) return false;
+        this.prevLocation = JSON.stringify(windowLocation);
 
-        let path = window.location.pathname;
-        let fullPath = path + window.location.search;
+        let path = windowLocation.pathname;
+        let fullPath = path + windowLocation.search;
+
+        const parsedURL = new URL(windowLocation.href);
+        const searchParams = {};
+
+        for (let p of parsedURL.searchParams) {
+            const key = p[0];
+            const value = p[1];
+            if (value !== '') searchParams[key] = value;
+        }
+        this.searchParams = searchParams;
 
         const route = {
             path,
@@ -74,31 +97,36 @@ export const currentRoute = new CurrentRoute();
  */
 @observer
 export class Router extends React.Component {
-    @observable currentComponent = null;
-    autoRunDispose;
+    @observable.ref currentComponent = null;
+    reactionDisposers = [];
 
     constructor(props) {
         super(props);
 
-        this.autoRunDispose = autorun(() => {
-            this.navigate();
-        });
+        this.reactionDisposers.push(reaction(
+            () => {
+                return currentRoute.currentLocation;
+            },
+            () => {
+                this.navigate();
+            },
+            { fireImmediately: true },
+        ));
     }
 
     componentWillUnmount() {
-        this.autoRunDispose();
+        this.reactionDisposers.forEach(d => d());
     }
 
     navigate() {
         const { routes, global } = this.props;
-        let result = routes[''] || null;
+        let result = routes[''] || routes['*'] || null;
 
-        let isRouteChanged = false;
+        let isRouteFound = false;
 
         for (const route in routes) {
             if (!routes.hasOwnProperty(route)) continue;
-
-            if (route === '') continue;
+            if (route === '' || route === '*') continue;
             const component = routes[route];
 
             const keys = [];
@@ -106,22 +134,25 @@ export class Router extends React.Component {
             const res = exec(regexp, currentRoute.currentLocation.path, keys);
 
             if (res) {
-                // Does route actually changed?
-                if (regexp + '' !== currentRoute.currentRegExp + '') {
-                    isRouteChanged = true;
-                }
+                isRouteFound = true;
+                result = component;
 
                 // Set global route params only from global router, not from local
                 if (global) {
                     currentRoute.routeParams = res;
-                    if (isRouteChanged) currentRoute.currentRegExp = regexp;
+                    currentRoute.currentRegExp = regexp;
                 }
-                result = component;
+
                 break;
             }
         }
 
-        if (isRouteChanged) this.currentComponent = result;
+        if (!isRouteFound) {
+            currentRoute.routeParams = {};
+            currentRoute.currentRegExp = pathToRegexp(currentRoute.currentLocation.path, []);
+        }
+
+        this.currentComponent = result;
     }
 
     render() {
@@ -134,26 +165,42 @@ export class Router extends React.Component {
  * Props explanation:
  * to - link url
  * exact - mark active only if to === currentLocation.fullPath instead of current global route regexp match
+ * dontIgnoreHash - Don't ignore hash when exact active
  * grabActive - callback function that tells is link active or not
  */
 @observer
 export class Link extends React.Component {
     @observable active = false;
-    autoRunDispose;
+    reactionDisposers = [];
 
     constructor(props) {
         super(props);
 
-        this.autoRunDispose = autorun(() => {
-            this.calcActive();
-        });
+        this.reactionDisposers.push(reaction(
+            () => {
+                const { to, exact } = this.props;
+                const { currentRegExp, currentLocation } = currentRoute;
+                const json = JSON.stringify([
+                    to,
+                    exact,
+                    currentLocation,
+                    currentRegExp,
+                ]);
+
+                return json;
+            },
+            () => {
+                this.calcActive();
+            },
+            { fireImmediately: true },
+        ));
     }
 
     componentWillUnmount() {
-        this.autoRunDispose();
+        this.reactionDisposers.forEach(d => d());
     }
 
-    handleClick = (e) => {
+    handleClick = e => {
         e.preventDefault();
         const { to } = this.props;
 
@@ -161,12 +208,17 @@ export class Link extends React.Component {
     };
 
     calcActive = () => {
-        const { to, exact, grabActive } = this.props;
+        const { to, exact, dontIgnoreHash, grabActive } = this.props;
         const { currentRegExp, currentLocation } = currentRoute;
 
         let active = false;
         if (exact) {
-            active = (to === currentLocation.fullPath);
+            if (dontIgnoreHash) {
+                active = to === currentLocation.fullPath + currentLocation.location.hash;
+            }
+            else {
+                active = to === currentLocation.fullPath;
+            }
         }
         else if (currentRegExp && currentRegExp.exec(to)) {
             active = true;
@@ -179,9 +231,18 @@ export class Link extends React.Component {
     };
 
     render() {
-        const { to, children, grabActive, exact, ...restProps } = this.props;
+        const { to, children, dontIgnoreHash, grabActive, exact, ...restProps } = this.props;
         const { active } = this;
 
-        return <a { ...restProps } href={ to } data-active={ active } onClick={ this.handleClick }>{ children }</a>;
+        return (
+            <a
+                { ...restProps }
+                href={ to }
+                data-active={ active }
+                onClick={ this.handleClick }
+            >
+                { children }
+            </a>
+        );
     }
 }
