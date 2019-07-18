@@ -25,6 +25,9 @@ window.addEventListener('popstate', () => {
 });
 
 export function redirect(to, title = '') {
+    const currentFullPath = window.location.href.substr(window.location.origin.length);
+    if (currentFullPath === to) return;
+
     history.pushState({}, title, to);
     currentRoute.setCurrentRoute();
 }
