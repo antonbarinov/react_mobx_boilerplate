@@ -180,14 +180,13 @@ export class Link extends React.Component {
             () => {
                 const { to, exact } = this.props;
                 const { currentRegExp, currentLocation } = currentRoute;
-                const json = JSON.stringify([
+
+                return [
                     to,
                     exact,
                     currentLocation,
                     currentRegExp,
-                ]);
-
-                return json;
+                ];
             },
             () => {
                 this.calcActive();
