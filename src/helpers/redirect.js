@@ -1,4 +1,4 @@
-import { redirect } from 'components/router';
+import { redirect } from 'lib/router';
 
 export function smartRedirect(to) {
     const redirectTo = window.localStorage.getItem('redirect');

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link } from 'components/router';
+import { Link } from 'lib/router';
 import { observer } from 'mobx-react';
 import userState from 'globalState/user';
 

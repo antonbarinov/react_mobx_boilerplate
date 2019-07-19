@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Container from 'components/container';
+import Container from 'components/Container';
 
 import styles from './styles.module.scss';
 

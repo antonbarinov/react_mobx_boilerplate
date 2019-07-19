@@ -1,52 +1,34 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable, reaction } from 'mobx';
-import Container from 'components/container';
-import { currentRoute, Router } from 'components/router';
+import Container from 'components/Container';
+import { currentRoute, Router } from 'lib/router';
 
+import State from './state';
+const localState = new State();
 
 @observer
 export default class MainPage extends React.Component {
-    @observable time = new Date();
-    reactionDisposers = [];
-
     constructor(props) {
         super(props);
 
         document.title = 'Main Page | Boilerplate';
 
-        console.log('constructor');
-
-        this.reactionDisposers.push(reaction(
-            () => {
-                return currentRoute.currentLocation.location.hash;
-            },
-            () => {
-                console.log('now hash is:', currentRoute.currentLocation.location.hash);
-            },
-            { fireImmediately: true, delay: 1 },
-        ));
-
-        this.updateInterval = setInterval(() => {
-            this.time = new Date();
-        }, 100);
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.updateInterval);
-        this.reactionDisposers.forEach(d => d());
+        // or this.state = new State(); if we don't want to store last state of this component
+        this.state = localState;
     }
 
     render() {
         const { routeParams, currentLocation } = currentRoute;
         const { page } = routeParams;
         const searchParams = currentRoute.searchParams;
+        const state = this.state;
 
         return (
             <Container>
-                <h1>Main page</h1>
+                <h1>{ state.title }</h1>
+                <input value={ state.title } onChange={ state.handleTitleChange } />
                 { page && <h3>Route param "page": { page }</h3> }
-                <div>This time is { this.time.toISOString() }</div>
+                <div>This time is { state.time }</div>
                 <div>Hash: { currentLocation.location.hash }</div>
                 <div>searchParams: { JSON.stringify(searchParams) }</div>
 

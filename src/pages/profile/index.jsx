@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import Container from 'components/container';
+import Container from 'components/Container';
 import userState from 'globalState/user';
 
 import styles from './styles.module.scss';

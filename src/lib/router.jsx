@@ -112,9 +112,10 @@ export class Router extends React.Component {
             },
             () => {
                 this.navigate();
-            },
-            { fireImmediately: true },
+            }
         ));
+
+        this.navigate();
     }
 
     componentWillUnmount() {
@@ -193,9 +194,10 @@ export class Link extends React.Component {
             },
             () => {
                 this.calcActive();
-            },
-            { fireImmediately: true },
+            }
         ));
+
+        this.calcActive();
     }
 
     componentWillUnmount() {

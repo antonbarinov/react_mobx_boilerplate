@@ -1,86 +1,32 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable } from 'mobx';
-import userState from 'globalState/user';
-import FormValidator from 'helpers/formValidator';
-import FormInput from 'components/formItems/input';
-import FormButton from 'components/formItems/button';
-import FormServerErrors from 'components/formItems/serverErrors';
-import { smartRedirect } from 'helpers/redirect';
-import { Link } from 'components/router';
+import FormInput from 'components/formItems/Input';
+import FormButton from 'components/formItems/Button';
+import FormServerErrors from 'components/formItems/ServerErrors';
+import { Link } from 'lib/router';
+import Container from 'components/Container';
 
 import styles from './styles.module.scss';
-import Container from 'components/container';
+
+import State from './state';
+const localState = new State();
+
 
 
 @observer
 export default class SignUpPage extends React.Component {
-    @observable formFields = {
-        login: FormValidator.createFormFieldObj(),
-        password: FormValidator.createFormFieldObj(),
-        full_name: FormValidator.createFormFieldObj(),
-    };
-    @observable serverError = '';
-
     constructor(props) {
         super(props);
+
+        // or this.state = new State(); if we don't want to store last state of this component
+        this.state = localState;
+
+        document.title = 'Signup Page | Boilerplate';
     }
 
-    // Validate form and submit
-    validateAndSubmit = async () => {
-        const fv = new FormValidator(this.formFields);
-        const promises = [];
-
-        // Validate login
-        promises.push(
-            fv.validateField(this.formFields.login, (val) => {
-                if (val.length < 3) return `Login must contain not less than 3 symbols`;
-                if (val === '111') return `This login not allowed`;
-            }),
-        );
-
-        // Validate password
-        promises.push(
-            fv.validateField(this.formFields.password, (val) => {
-                if (val.length < 3) return `Password must contain not less than 3 symbols`;
-            }),
-        );
-
-        // Validate full name
-        promises.push(
-            fv.validateField(this.formFields.full_name, (val) => {
-                const wordsCount = val.trim().split(' ').length;
-                if (wordsCount < 2) return `Full name must contain first name and last name`;
-            }),
-        );
-
-        // Await for validations
-        await Promise.all(promises);
-
-        const isValid = fv.isFieldsValid();
-
-        if (!isValid) return false;
-
-        try {
-            const data = fv.getFieldsData();
-            let result = await userState.signup(data);
-            if (result) {
-                // Success
-                smartRedirect('/profile');
-            }
-        }
-        catch (e) {
-            const errorsParsed = fv.applyServerValidationErrors(e.response.data);
-            if (!errorsParsed) this.serverError = fv.serverErrorMessage || e.message;
-        }
-    };
-
-    handleValueChange = (e) => {
-        const { name, value } = e.target;
-        this.formFields[name].value = value;
-    };
-
     render() {
+        const state = this.state;
+
         return (
             <Container className={ styles.container }>
                 <h1>Sign up</h1>
@@ -88,24 +34,27 @@ export default class SignUpPage extends React.Component {
                     <FormInput
                         placeholder="Full name"
                         name="full_name"
-                        onChange={ this.handleValueChange }
-                        msg={ this.formFields.full_name.errorMessage }
+                        onChange={ state.handleValueChange }
+                        value={ state.formFields.full_name.value }
+                        msg={ state.formFields.full_name.errorMessage }
                     />
                     <FormInput
                         placeholder="Login"
                         name="login"
-                        onChange={ this.handleValueChange }
-                        msg={ this.formFields.login.errorMessage }
+                        onChange={ state.handleValueChange }
+                        value={ state.formFields.login.value }
+                        msg={ state.formFields.login.errorMessage }
                     />
                     <FormInput
                         placeholder="Password"
                         type="password"
                         name="password"
-                        onChange={ this.handleValueChange }
-                        msg={ this.formFields.password.errorMessage }
+                        onChange={ state.handleValueChange }
+                        value={ state.formFields.password.value }
+                        msg={ state.formFields.password.errorMessage }
                     />
-                    <FormServerErrors msg={ this.serverError } />
-                    <FormButton onClick={ this.validateAndSubmit }>Sign up</FormButton>
+                    <FormServerErrors msg={ state.serverError } />
+                    <FormButton onClick={ state.validateAndSubmit }>Sign up</FormButton>
                     <div className={ styles.underBtnText }>
                         Already have account? <Link to="/login">Login</Link> instead
                     </div>
