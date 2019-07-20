@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { action, observable } from 'mobx';
 import apiRequest, { getUserAccessToken } from 'lib/apiRequest';
 
 
@@ -12,8 +12,7 @@ class User {
         this.fetchMe().catch(console.error);
     }
 
-    @action
-    async fetchMe() {
+    @action fetchMe = async () => {
         const accessToken = getUserAccessToken();
 
         try {
@@ -36,14 +35,13 @@ class User {
         }
     }
 
-    @action logout() {
+    @action logout = () => {
         window.localStorage.removeItem('accessToken');
         this.user = false;
         this.authorized = false;
     }
 
-    @action
-    async login(data) {
+    @action login = async (data) => {
         const response = await new apiRequest('POST /login', false).sendJSON(data);
         const respData = response.getData();
 
@@ -60,8 +58,7 @@ class User {
         return respData;
     }
 
-    @action
-    async signup(data) {
+    @action signup = async (data) => {
         const response = await new apiRequest('POST /signup', false).sendJSON(data);
         const respData = response.getData();
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { observable, reaction } from 'mobx';
+import { action, observable, reaction } from 'mobx';
 import pathToRegexp from 'path-to-regexp';
 
 function exec(re, str, keys = []) {
@@ -60,7 +60,7 @@ class CurrentRoute {
         this.setCurrentRoute();
     }
 
-    setCurrentRoute() {
+    @action setCurrentRoute = () => {
         const windowLocation = JSON.parse(JSON.stringify(window.location));
         if (this.prevLocation === JSON.stringify(windowLocation)) return false;
         this.prevLocation = JSON.stringify(windowLocation);
