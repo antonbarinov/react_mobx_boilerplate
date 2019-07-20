@@ -69,14 +69,7 @@ class CurrentRoute {
         let fullPath = path + windowLocation.search;
 
         const parsedURL = new URL(windowLocation.href);
-        const searchParams = {};
-
-        for (let p of parsedURL.searchParams) {
-            const key = p[0];
-            const value = p[1];
-            if (value !== '') searchParams[key] = value;
-        }
-        this.searchParams = searchParams;
+        this.searchParams = Object.fromEntries(parsedURL.searchParams.entries());
 
         const route = {
             path,
