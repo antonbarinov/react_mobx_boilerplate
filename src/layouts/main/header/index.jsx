@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { Link } from 'lib/router';
 import { observer } from 'mobx-react';
+import { BaseComponent } from 'components/BaseComponent';
 import userState from 'globalState/user';
 
 import styles from './styles.module.scss';
 
 
 @observer
-export default class LayoutHeader extends React.Component {
+export default class LayoutHeader extends BaseComponent {
     render() {
         const { user } = userState;
 

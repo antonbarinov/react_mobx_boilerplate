@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { action, observable, reaction } from 'mobx';
 import pathToRegexp from 'path-to-regexp';
+import { BaseComponent } from 'components/BaseComponent';
 
 function exec(re, str, keys = []) {
     const match = re.exec(str);
@@ -92,14 +93,13 @@ export const currentRoute = new CurrentRoute();
  * global - mark router as global for populate currentRoute.routeParams and currentRoute.currentRegExp
  */
 @observer
-export class Router extends React.Component {
+export class Router extends BaseComponent {
     @observable.ref currentComponent = null;
-    reactionDisposers = [];
 
     constructor(props) {
         super(props);
 
-        this.reactionDisposers.push(reaction(
+        this.pushEffect(() => reaction(
             () => {
                 return currentRoute.currentLocation;
             },
@@ -109,10 +109,6 @@ export class Router extends React.Component {
         ));
 
         this.navigate();
-    }
-
-    componentWillUnmount() {
-        this.reactionDisposers.forEach(d => d());
     }
 
     navigate() {
@@ -166,14 +162,13 @@ export class Router extends React.Component {
  * grabActive - callback function that tells is link active or not
  */
 @observer
-export class Link extends React.Component {
+export class Link extends BaseComponent {
     @observable active = false;
-    reactionDisposers = [];
 
     constructor(props) {
         super(props);
 
-        this.reactionDisposers.push(reaction(
+        this.pushEffect(() => reaction(
             () => {
                 const { to, exact } = this.props;
                 const { currentRegExp, currentLocation } = currentRoute;
@@ -191,10 +186,6 @@ export class Link extends React.Component {
         ));
 
         this.calcActive();
-    }
-
-    componentWillUnmount() {
-        this.reactionDisposers.forEach(d => d());
     }
 
     handleClick = e => {
