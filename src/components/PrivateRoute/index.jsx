@@ -3,16 +3,15 @@ import * as React from 'react';
 import { reaction } from 'mobx';
 import userState from 'globalState/user';
 import { redirect } from 'lib/router';
+import { BaseComponent } from 'components/BaseComponent';
 
 
 @observer
-export default class PrivateRoute extends React.Component {
-    reactionDisposers = [];
-
+export default class PrivateRoute extends BaseComponent {
     constructor(props) {
         super(props);
 
-        this.reactionDisposers.push(reaction(
+        this.pushEffect(() => reaction(
             () => {
                 const { children } = this.props;
                 const { initialFetching, user } = userState;
@@ -28,10 +27,6 @@ export default class PrivateRoute extends React.Component {
             }));
 
         this.reactionHandler();
-    }
-
-    componentWillUnmount() {
-        this.reactionDisposers.forEach(d => d());
     }
 
     reactionHandler = () => {
