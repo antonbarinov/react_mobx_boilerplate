@@ -1,5 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { BaseComponent } from 'components/BaseComponent';
+import { hookHandleInitialFetching } from 'hooks/layouts/hookHandleInitialFetching';
+
 import Header from './header';
 import Footer from './footer';
 
@@ -7,35 +10,29 @@ import userState from 'globalState/user';
 
 import styles from './styles.module.scss';
 
-const Layout = observer(({ children, ...restParams }) => {
-    const { initialFetching } = userState;
 
-    const renderContent = () => {
+@observer
+export default class MainLayout extends BaseComponent {
+    constructor(props) {
+        super(props);
+
+        this.pushEffect(hookHandleInitialFetching);
+    }
+
+    render() {
+        const { initialFetching } = userState;
         if (initialFetching) return null;
 
-        // Hide preloader
-        document.getElementById('preloader').classList.add('hidden');
-
         return (
-            <React.Fragment>
+            <span>
                 <div className={ styles.wrap }>
                     <Header />
                     <div className={ styles.main }>
-                        { React.cloneElement(children, restParams) }
+                         { this.props.children }
                     </div>
                 </div>
                 <Footer />
-            </React.Fragment>
+            </span>
         );
-    };
-
-
-    return (
-        <span>
-            {renderContent()}
-        </span>
-    );
-});
-
-
-export default Layout;
+    }
+}

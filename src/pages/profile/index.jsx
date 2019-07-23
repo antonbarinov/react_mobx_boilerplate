@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { BaseComponent } from 'components/BaseComponent';
 import Container from 'components/Container';
 import userState from 'globalState/user';
 
@@ -7,7 +8,7 @@ import styles from './styles.module.scss';
 
 
 @observer
-export default class ProfilePage extends React.Component {
+export default class ProfilePage extends BaseComponent {
     constructor(props) {
         super(props);
 

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { BaseComponent } from 'components/BaseComponent';
 import FormInput from 'components/formItems/Input';
 import FormButton from 'components/formItems/Button';
 import FormServerErrors from 'components/formItems/ServerErrors';
@@ -12,9 +13,8 @@ import State from './state';
 const localState = new State();
 
 
-
 @observer
-export default class SignUpPage extends React.Component {
+export default class SignUpPage extends BaseComponent {
     constructor(props) {
         super(props);
 

@@ -1,10 +1,13 @@
 {
-    "compilerOptions": {
-      "baseUrl": "./src",
-      "target": "es2018",
-      "experimentalDecorators": true,
-      "checkJs": true
-    },
-    "exclude": [],
-    "include": [ "node_mobules", "./src" ]
-  }
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "target": "es2018",
+    "experimentalDecorators": true,
+    "checkJs": true
+  },
+  "exclude": [],
+  "include": [
+    "node_mobules",
+    "./src"
+  ]
+}

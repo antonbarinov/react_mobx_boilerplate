@@ -1,20 +1,41 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { BaseComponent } from 'components/BaseComponent';
 import Container from 'components/Container';
 import { currentRoute, Router } from 'lib/router';
 
 import State from './state';
+
 const localState = new State();
 
+function updateTime(state) {
+    return () => {
+        const interval = setInterval(() => {
+            state.time = new Date().toISOString();
+        }, 100);
+
+        // Return cleanup function if need
+        return () => {
+            clearInterval(interval);
+        };
+    };
+}
+
+
+
 @observer
-export default class MainPage extends React.Component {
+export default class MainPage extends BaseComponent {
     constructor(props) {
         super(props);
+
+        console.log('constructor');
 
         document.title = 'Main Page | Boilerplate';
 
         // or this.state = new State(); if we don't want to store last state of this component
         this.state = localState;
+
+        this.pushEffect(updateTime(this.state));
     }
 
     render() {
@@ -31,10 +52,6 @@ export default class MainPage extends React.Component {
                 <div>This time is { state.time }</div>
                 <div>Hash: { currentLocation.location.hash }</div>
                 <div>searchParams: { JSON.stringify(searchParams) }</div>
-
-                <Router routes={ {
-                    '/page/:p': <div>Matching <b>/page/:p</b> route</div>,
-                } } />
             </Container>
         );
     }
