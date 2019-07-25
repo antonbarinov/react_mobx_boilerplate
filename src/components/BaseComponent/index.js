@@ -21,13 +21,13 @@ export class BaseComponent extends React.Component {
     }
 
     componentWillUnmount() {
-        for (const { callback } of this.__cleanupEffects) {
+        for (const callback of this.__cleanupEffects) {
             callback();
         }
     };
 
     componentDidUpdate() {
-        for (const { callback, reactOnComponentDidUpdate } of this.__cleanupEffects) {
+        for (const { callback, reactOnComponentDidUpdate } of this.__effects) {
             if (reactOnComponentDidUpdate) callback();
         }
     }
