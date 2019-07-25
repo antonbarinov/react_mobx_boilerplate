@@ -9,23 +9,32 @@ export class BaseComponent extends React.Component {
         super(props);
     }
 
-    pushEffect = (callback) => {
+    pushEffect = (callback, reactOnComponentDidUpdate = false) => {
         if (typeof callback === 'function') {
-            this.__effects.push(callback)
+            this.__effects.push({
+                callback,
+                reactOnComponentDidUpdate
+            });
         } else {
             throw new Error('Only functions can be passed into addEffect()');
         }
     }
 
     componentWillUnmount() {
-        for (const cb of this.__cleanupEffects) {
-            cb();
+        for (const { callback } of this.__cleanupEffects) {
+            callback();
         }
     };
 
+    componentDidUpdate() {
+        for (const { callback, reactOnComponentDidUpdate } of this.__cleanupEffects) {
+            if (reactOnComponentDidUpdate) callback();
+        }
+    }
+
     componentDidMount() {
-        for (const cb of this.__effects) {
-            const result = cb();
+        for (const { callback } of this.__effects) {
+            const result = callback();
             if (typeof result === 'function') this.__cleanupEffects.push(result);
         }
     };
