@@ -2,15 +2,17 @@ import axios from 'axios';
 import userState from 'globalState/user';
 
 
-let API_BASE_URL = 'http://localhost:3010';
+let apiUrl = 'http://localhost:3010';
 
 // Environment api path
 if (NODE_ENV === 'production') {
-    API_BASE_URL = 'http://localhost:3010';
+    apiUrl = 'http://localhost:3010';
 }
 else if (NODE_ENV === 'staging') {
-    API_BASE_URL = 'http://localhost:3010';
+    apiUrl = 'http://localhost:3010';
 }
+
+export const API_BASE_URL = apiUrl;
 
 function getDataHandler(resp) {
     return () => {
@@ -77,7 +79,7 @@ class apiRequest {
 
         // Upload progress
         options.onUploadProgress = (progressEvent) => {
-            let uploadPercentage = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total));
+            let uploadPercentage = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total) + '');
             if (typeof this.__onUploadProgress === 'function') {
                 this.__onUploadProgress(uploadPercentage);
             }
