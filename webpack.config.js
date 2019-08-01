@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const p = require('./package.json');
 
 const path = require('path');
@@ -168,6 +169,9 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             template: 'index.html',
+        }),
+        new ScriptExtHtmlWebpackPlugin({
+            defaultAttribute: 'defer'
         }),
         new CleanWebpackPlugin([ 'dist' ]),
         new CopyWebpackPlugin([

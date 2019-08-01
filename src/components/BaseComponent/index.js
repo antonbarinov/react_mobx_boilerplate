@@ -28,13 +28,13 @@ export class BaseComponent extends React.Component {
 
     componentDidUpdate() {
         for (const { callback, reactOnComponentDidUpdate } of this.__effects) {
-            if (reactOnComponentDidUpdate) callback();
+            if (reactOnComponentDidUpdate) callback(false, true);
         }
     }
 
     componentDidMount() {
         for (const { callback } of this.__effects) {
-            const result = callback();
+            const result = callback(true, false);
             if (typeof result === 'function') this.__cleanupEffects.push(result);
         }
     };
