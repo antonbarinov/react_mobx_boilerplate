@@ -1,7 +1,10 @@
 import axios from 'axios';
+import { observable } from 'mobx';
 import userState from 'globalState/user';
 
-
+/**
+ * API BASE URL
+ */
 let apiUrl = 'http://localhost:3010';
 
 // Environment api path
@@ -12,7 +15,12 @@ else if (NODE_ENV === 'staging') {
     apiUrl = 'http://localhost:3010';
 }
 
+window.API_BASE_URL = apiUrl;
+
 export const API_BASE_URL = apiUrl;
+/**
+ * API BASE URL -- END
+ */
 
 function getDataHandler(resp) {
     return () => {
@@ -21,7 +29,7 @@ function getDataHandler(resp) {
 }
 
 
-class apiRequest {
+export default class ApiRequest {
     __unifyErrorsHandler = true;
     __method = 'GET';
     __url = '/';
@@ -30,21 +38,35 @@ class apiRequest {
     };
     __data = null;
     __onUploadProgress = false;
+    __apiReactiveResponse = null;
 
     constructor(url = 'GET /', unifyErrorsHandler = true) {
         this.__unifyErrorsHandler = unifyErrorsHandler;
         const spaceIndex = url.indexOf(' ');
         this.__method = url.substr(0, spaceIndex).trim().toUpperCase();
         this.__url = url.substr(spaceIndex + 1).trim();
+
+        if (!this.isAbsolute()) this.__url = (window.API_BASE_URL || API_BASE_URL) + this.__url;
+    }
+
+    isAbsolute() {
+        return this.__url.indexOf('http://') === 0 || this.__url.indexOf('https://') === 0;
+    }
+
+    withApiReactiveResponse(apiReactiveResponse) {
+        this.__apiReactiveResponse = apiReactiveResponse;
+
+        return this;
     }
 
     qs(params = {}) {
-        const esc = encodeURIComponent;
-        const query = Object.keys(params)
-                            .map(k => esc(k) + '=' + esc(params[k]))
-                            .join('&');
+        const url = new URL(this.__url, window.location.href);
+        for (const key in params) {
+            if (!params.hasOwnProperty(key)) continue;
+            url.searchParams.set(key, params[key]);
+        }
 
-        this.__url += (this.__url.indexOf('?') === -1 ? '?' : '&') + query;
+        this.__url = url.href;
 
         return this;
     }
@@ -74,8 +96,7 @@ class apiRequest {
         const userAccessToken = getUserAccessToken();
         if (userAccessToken) options.headers['Authorization'] = userAccessToken;
 
-        let baseUrl = window.API_BASE_URL || API_BASE_URL;
-        options.url = baseUrl + this.__url;
+        options.url = this.__url;
 
         // Upload progress
         options.onUploadProgress = (progressEvent) => {
@@ -85,8 +106,12 @@ class apiRequest {
             }
         };
 
-        let response;
+        const ar = this.__apiReactiveResponse;
 
+        ar && ar.reset();
+        ar && (ar.isFetching = true);
+
+        let response;
         let error;
 
         try {
@@ -98,6 +123,14 @@ class apiRequest {
         }
         finally {
 
+        }
+
+        ar && (ar.response = response);
+        if (ar) {
+            setTimeout(() => {
+                ar.isFetching = false;
+                ar.responseDone = true;
+            });
         }
 
         /**
@@ -122,6 +155,9 @@ class apiRequest {
          */
         else {
             error.message = (response.data && response.data.message) || error.message;
+
+            ar && (ar.error = true);
+            ar && (ar.errorText = error.message);
 
             if (!this.__unifyErrorsHandler) throw error;
 
@@ -154,5 +190,16 @@ export function getUserAccessToken() {
     return window.localStorage.getItem('accessToken');
 }
 
+export class ApiReactiveResponse {
+    @observable responseDone = false;
+    @observable isFetching = false;
+    @observable response = null;
+    @observable error = false;
+    @observable errorText = null;
 
-export default apiRequest;
+    reset = () => {
+        this.responseDone = false;
+        this.error = false;
+        this.errorText = null;
+    };
+}

@@ -2,6 +2,7 @@ import { observable } from 'mobx';
 import FormValidator from 'helpers/formValidator';
 import userState from 'globalState/user';
 import { smartRedirect } from 'helpers/redirect';
+import { ApiReactiveResponse } from 'lib/apiRequest';
 
 
 export default class State {
@@ -10,9 +11,12 @@ export default class State {
         password: FormValidator.createFormFieldObj(),
     };
     @observable serverError = '';
+    @observable submitInProgress = false;
 
     // Validate form and submit
     validateAndSubmit = async () => {
+        if (this.submitInProgress) return;
+
         const fv = new FormValidator(this.formFields);
         const promises = [];
 
@@ -39,6 +43,7 @@ export default class State {
         if (!isValid) return false;
 
         try {
+            this.submitInProgress = true;
             const data = fv.getFieldsData();
             let result = await userState.login(data);
             if (result) {
@@ -49,6 +54,8 @@ export default class State {
         catch (e) {
             const errorsParsed = fv.applyServerValidationErrors(e.response.data);
             if (!errorsParsed) this.serverError = fv.serverErrorMessage || e.message;
+        } finally {
+            this.submitInProgress = false;
         }
     };
 

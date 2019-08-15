@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import apiRequest, { getUserAccessToken } from 'lib/apiRequest';
+import ApiRequest, { getUserAccessToken } from 'lib/apiRequest';
 
 
 class User {
@@ -18,7 +18,7 @@ class User {
         try {
             if (accessToken) {
                 this.isFetching = true;
-                const response = await new apiRequest('GET /me').send();
+                const response = await new ApiRequest('GET /me').send();
                 this.user = response.getData();
                 this.authorized = true;
             }
@@ -42,7 +42,7 @@ class User {
     }
 
     @action login = async (data) => {
-        const response = await new apiRequest('POST /login', false).sendJSON(data);
+        const response = await new ApiRequest('POST /login', false).sendJSON(data);
         const respData = response.getData();
 
         if (respData.accessToken) {
@@ -59,7 +59,7 @@ class User {
     }
 
     @action signup = async (data) => {
-        const response = await new apiRequest('POST /signup', false).sendJSON(data);
+        const response = await new ApiRequest('POST /signup', false).sendJSON(data);
         const respData = response.getData();
 
         if (respData.accessToken) {

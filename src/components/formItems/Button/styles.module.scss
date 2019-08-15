@@ -8,6 +8,12 @@
     transition: opacity .3s ease;
     user-select: none;
 
+    &.loading {
+        pointer-events: none;
+        cursor: default;
+        opacity: .6;
+    }
+
     &:hover {
         opacity: .8;
     }
@@ -19,4 +25,8 @@
     &:last-child {
         margin-right: 0;
     }
+}
+
+.animation {
+    margin-right: 10px;
 }

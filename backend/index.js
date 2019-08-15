@@ -5,6 +5,14 @@ const app = express();
 
 let users = [];
 
+function sleep(ms = 0) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve();
+        }, ms);
+    });
+}
+
 app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
         res.setHeader('Allow', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -34,7 +42,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.post('/signup', (req, res) => {
+app.post('/signup', async (req, res) => {
+    await sleep(1000);
+
     const data = req.body;
     const filtered = users.filter(u => u.login === data.login);
     if (filtered.length) {
@@ -70,7 +80,9 @@ app.post('/signup', (req, res) => {
     }
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
+    await sleep(1000);
+
     const data = req.body;
     const filtered = users.filter(u => u.login === data.login && u.password === data.password);
     if (filtered.length) {
@@ -100,10 +112,20 @@ app.post('/login', (req, res) => {
     }
 });
 
-app.get('/me', authOnlyMiddleware, (req, res) => {
+app.get('/me', authOnlyMiddleware, async (req, res) => {
+    await sleep(1000);
+
     res.send({
         status: 'OK',
         data: req.user,
+    });
+});
+
+app.get('/long_response', async (req, res) => {
+    await sleep(5000);
+    res.send({
+        status: 'OK',
+        data: 'long response',
     });
 });
 

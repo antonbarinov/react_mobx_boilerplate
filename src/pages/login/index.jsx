@@ -10,6 +10,8 @@ import { Link } from 'lib/router';
 import styles from './styles.module.scss';
 
 import State from './state';
+import LoadingAnimationOverlay from 'components/LoadingAntimationOverlay';
+
 const localState = new State();
 
 
@@ -29,27 +31,30 @@ export default class LoginPage extends BaseComponent {
 
         return (
             <Container className={ styles.container }>
-                <h1>Login</h1>
-                <div>
-                    <FormInput
-                        placeholder="Login"
-                        name="login"
-                        onChange={ state.handleValueChange }
-                        value={ state.formFields.login.value }
-                        msg={ state.formFields.login.errorMessage }
-                    />
-                    <FormInput
-                        placeholder="Password"
-                        type="password"
-                        name="password"
-                        onChange={ state.handleValueChange }
-                        value={ state.formFields.password.value }
-                        msg={ state.formFields.password.errorMessage }
-                    />
-                    <FormServerErrors msg={ state.serverError } />
-                    <FormButton onClick={ state.validateAndSubmit }>Login</FormButton>
-                    <div className={ styles.underBtnText }>
-                        Doesn't have account? <Link to="/signup">Sing up</Link> instead
+                { state.submitInProgress && <LoadingAnimationOverlay bluredContainerRef={ this.bluredContainer } /> }
+                <div ref={ (ref) => this.bluredContainer = ref }>
+                    <h1>Login</h1>
+                    <div>
+                        <FormInput
+                            placeholder="Login"
+                            name="login"
+                            onChange={ state.handleValueChange }
+                            value={ state.formFields.login.value }
+                            msg={ state.formFields.login.errorMessage }
+                        />
+                        <FormInput
+                            placeholder="Password"
+                            type="password"
+                            name="password"
+                            onChange={ state.handleValueChange }
+                            value={ state.formFields.password.value }
+                            msg={ state.formFields.password.errorMessage }
+                        />
+                        <FormServerErrors msg={ state.serverError } />
+                        <FormButton onClick={ state.validateAndSubmit } loading={ state.submitInProgress && 'Logging in...' }>Login</FormButton>
+                        <div className={ styles.underBtnText }>
+                            Doesn't have account? <Link to="/signup">Sing up</Link> instead
+                        </div>
                     </div>
                 </div>
             </Container>
