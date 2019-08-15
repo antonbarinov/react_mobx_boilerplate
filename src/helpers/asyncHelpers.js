@@ -37,6 +37,24 @@ function stillActualChecker(context, key) {
     };
 }
 
+export function withOnlyOneInTime(context, key, func) {
+    (async () => {
+        key += '__withOnlyOneInTime';
+        const contextData = contextHelper(context, key);
+        if (contextData.value === 1) return false;
+
+        contextData.value = 1;
+
+        try {
+            await func();
+        } catch (e) {
+            throw e;
+        } finally {
+            contextData.value = 0;
+        }
+    })();
+}
+
 export function withAsyncHelpers(context, key, func) {
     (async () => {
         const stillActualCheckpoint = stillActualChecker(context, key);
