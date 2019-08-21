@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 
-export default class State {
+export default class {
     @observable time = new Date().toISOString();
     @observable title = 'Main page';
 

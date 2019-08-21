@@ -1,0 +1,30 @@
+.container {
+    padding-bottom: 40px;
+
+    .label {
+        margin-bottom: 5px;
+        margin-left: 3px;
+    }
+
+    .msg {
+        position: absolute;
+        color: red;
+        margin-top: 3px;
+
+        opacity: 0;
+        visibility: hidden;
+
+        transition: opacity .3s ease;
+    }
+
+    &.error {
+        & > textarea, input, select {
+            border-color: red;
+        }
+
+        .msg {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { observable } from 'mobx';
 import userState from 'globalState/user';
 
 /**
@@ -38,7 +37,6 @@ export default class ApiRequest {
     };
     __data = null;
     __onUploadProgress = false;
-    __apiReactiveResponse = null;
 
     constructor(url = 'GET /', unifyErrorsHandler = true) {
         this.__unifyErrorsHandler = unifyErrorsHandler;
@@ -51,12 +49,6 @@ export default class ApiRequest {
 
     isAbsolute() {
         return this.__url.indexOf('http://') === 0 || this.__url.indexOf('https://') === 0;
-    }
-
-    withApiReactiveResponse(apiReactiveResponse) {
-        this.__apiReactiveResponse = apiReactiveResponse;
-
-        return this;
     }
 
     qs(params = {}) {
@@ -106,11 +98,6 @@ export default class ApiRequest {
             }
         };
 
-        const ar = this.__apiReactiveResponse;
-
-        ar && ar.reset();
-        ar && (ar.isFetching = true);
-
         let response;
         let error;
 
@@ -125,13 +112,6 @@ export default class ApiRequest {
 
         }
 
-        ar && (ar.response = response);
-        if (ar) {
-            setTimeout(() => {
-                ar.isFetching = false;
-                ar.responseDone = true;
-            });
-        }
 
         /**
          * Not authorized
@@ -155,9 +135,6 @@ export default class ApiRequest {
          */
         else {
             error.message = (response.data && response.data.message) || error.message;
-
-            ar && (ar.error = true);
-            ar && (ar.errorText = error.message);
 
             if (!this.__unifyErrorsHandler) throw error;
 
@@ -188,18 +165,4 @@ export default class ApiRequest {
 
 export function getUserAccessToken() {
     return window.localStorage.getItem('accessToken');
-}
-
-export class ApiReactiveResponse {
-    @observable responseDone = false;
-    @observable isFetching = false;
-    @observable response = null;
-    @observable error = false;
-    @observable errorText = null;
-
-    reset = () => {
-        this.responseDone = false;
-        this.error = false;
-        this.errorText = null;
-    };
 }

@@ -6,17 +6,20 @@ import FormButton from 'components/formItems/Button';
 import FormServerErrors from 'components/formItems/ServerErrors';
 import Container from 'components/Container';
 import { Link } from 'lib/router';
+import LoadingAnimationOverlay from 'components/LoadingAntimationOverlay';
+import FormFieldWrapper from 'components/formItems/FormFieldWrapper';
 
 import styles from './styles.module.scss';
 
 import State from './state';
-import LoadingAnimationOverlay from 'components/LoadingAntimationOverlay';
 
 const localState = new State();
 
 
 @observer
 export default class LoginPage extends BaseComponent {
+    bluredContainer = React.createRef();
+
     constructor(props) {
         super(props);
 
@@ -32,24 +35,22 @@ export default class LoginPage extends BaseComponent {
         return (
             <Container className={ styles.container }>
                 { state.submitInProgress && <LoadingAnimationOverlay bluredContainerRef={ this.bluredContainer } /> }
-                <div ref={ (ref) => this.bluredContainer = ref }>
+                <div ref={ this.bluredContainer }>
                     <h1>Login</h1>
                     <div>
-                        <FormInput
-                            placeholder="Login"
-                            name="login"
-                            onChange={ state.handleValueChange }
-                            value={ state.formFields.login.value }
-                            msg={ state.formFields.login.errorMessage }
-                        />
-                        <FormInput
-                            placeholder="Password"
-                            type="password"
-                            name="password"
-                            onChange={ state.handleValueChange }
-                            value={ state.formFields.password.value }
-                            msg={ state.formFields.password.errorMessage }
-                        />
+                        <FormFieldWrapper field={ state.formFields.login }>
+                            <FormInput
+                                placeholder="Login"
+                                field={ state.formFields.login }
+                            />
+                        </FormFieldWrapper>
+                        <FormFieldWrapper field={ state.formFields.password }>
+                            <FormInput
+                                placeholder="Password"
+                                type="password"
+                                field={ state.formFields.password }
+                            />
+                        </FormFieldWrapper>
                         <FormServerErrors msg={ state.serverError } />
                         <FormButton onClick={ state.validateAndSubmit } loading={ state.submitInProgress && 'Logging in...' }>Login</FormButton>
                         <div className={ styles.underBtnText }>

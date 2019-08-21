@@ -75,5 +75,6 @@ class User {
     }
 }
 
+const userState = new User();
 
-export default new User();
+export default userState;

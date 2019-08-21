@@ -1,18 +1,25 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
+import { BaseComponent } from 'components/BaseComponent';
+import PropTypes from 'prop-types';
 
 import styles from './styles.module.scss';
 
 
-const FormServerErrors = observer(({ msg = '' }) => {
-    if (!msg) return null;
+@observer
+export default class FormServerErrors extends BaseComponent {
+    static propTypes = {
+        msg: PropTypes.string,
+    };
 
-    return (
-        <div className={ styles.serverErrorsContainer }>
-            <div className={ styles.msg }>{ msg }</div>
-        </div>
-    );
-});
+    render() {
+        const { msg } = this.props;
+        if (!msg) return null;
 
-
-export default FormServerErrors;
+        return (
+            <div className={ styles.serverErrorsContainer }>
+                <div className={ styles.msg }>{ msg }</div>
+            </div>
+        );
+    }
+}

@@ -1,12 +1,18 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-
-import styles from './styles.module.scss';
+import PropTypes from 'prop-types';
 import LoadingAnimation from 'components/LoadingAntimation';
 import { BaseComponent } from 'components/BaseComponent';
 
+import styles from './styles.module.scss';
+
+
 @observer
-class FormButton extends BaseComponent {
+export default class FormButton extends BaseComponent {
+    static propTypes = {
+        loading: PropTypes.any,
+    };
+
     getContent = () => {
         const { loading } = this.props;
 
@@ -14,7 +20,7 @@ class FormButton extends BaseComponent {
             return (
                 <>
                     <span className={styles.animation}><LoadingAnimation /> </span>
-                    <span>{ loading }</span>
+                    <span>{ loading + '' }</span>
                 </>
             );
         }
@@ -37,6 +43,3 @@ class FormButton extends BaseComponent {
         );
     }
 }
-
-
-export default React.forwardRef((props, ref) => <FormButton innerRef={ ref } { ...props } />);
