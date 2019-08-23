@@ -82,27 +82,6 @@ module.exports = {
                     // It enables caching results in ./node_modules/.cache/babel-loader/
                     // directory for faster rebuilds.
                     cacheDirectory: true,
-                    babelrc: false,
-                    presets: [
-                        [
-                            '@babel/preset-env',
-                            {
-                                //'targets': { 'browsers': 'last 2 versions' }
-                                "targets": "> 0.25%, not dead"
-                            },
-                        ],
-                        '@babel/preset-react',
-                    ],
-                    plugins: [
-                        [
-                            '@babel/plugin-proposal-decorators',
-                            { 'legacy': true },
-                        ],
-                        [
-                            '@babel/plugin-proposal-class-properties',
-                            { 'loose': true },
-                        ],
-                    ],
                 },
             },
 
