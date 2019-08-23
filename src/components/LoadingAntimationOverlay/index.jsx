@@ -16,7 +16,7 @@ export default class LoadingAnimationOverlay extends BaseComponent {
     constructor(props) {
         super(props);
 
-        this.pushEffect(this.blurEffect);
+        this.useEffect(this.blurEffect);
     }
 
     blurEffect = () => {

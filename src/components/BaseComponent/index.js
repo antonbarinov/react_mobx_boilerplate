@@ -9,7 +9,7 @@ export class BaseComponent extends React.Component {
         super(props);
     }
 
-    pushEffect = (callback, reactOnComponentDidUpdate = false) => {
+    useEffect = (callback, reactOnComponentDidUpdate = false) => {
         if (typeof callback === 'function') {
             this.__effects.push({
                 callback,
@@ -18,7 +18,7 @@ export class BaseComponent extends React.Component {
         } else {
             throw new Error('Only functions can be passed into addEffect()');
         }
-    }
+    };
 
     componentWillUnmount() {
         for (const callback of this.__cleanupEffects) {

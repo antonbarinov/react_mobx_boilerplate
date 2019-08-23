@@ -11,7 +11,7 @@ export default class AuthLayout extends BaseComponent {
     constructor(props) {
         super(props);
 
-        this.pushEffect(hookHandleInitialFetching);
+        this.useEffect(hookHandleInitialFetching);
     }
 
     render() {

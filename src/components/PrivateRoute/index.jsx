@@ -11,7 +11,7 @@ export default class PrivateRoute extends BaseComponent {
     constructor(props) {
         super(props);
 
-        this.pushEffect(() => reaction(
+        this.useEffect(() => reaction(
             () => {
                 const { children } = this.props;
                 const { initialFetching, user } = userState;

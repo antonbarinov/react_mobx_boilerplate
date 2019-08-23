@@ -33,7 +33,7 @@ export default class MainPage extends BaseComponent {
         // or this.state = new State(); if we don't want to store last state of this component
         this.state = localState;
 
-        this.pushEffect(updateTime.bind(this));
+        this.useEffect(updateTime.bind(this));
     }
 
     render() {

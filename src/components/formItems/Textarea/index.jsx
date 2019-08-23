@@ -23,7 +23,7 @@ export default class FormTextarea extends BaseComponent {
             this.elem = props.innerRef;
         }
 
-        this.pushEffect(this.computeTextareaHeight, true);
+        this.useEffect(this.computeTextareaHeight, true);
     }
 
     computeTextareaHeight = () => {

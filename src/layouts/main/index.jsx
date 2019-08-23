@@ -16,7 +16,7 @@ export default class MainLayout extends BaseComponent {
     constructor(props) {
         super(props);
 
-        this.pushEffect(hookHandleInitialFetching);
+        this.useEffect(hookHandleInitialFetching);
     }
 
     render() {

@@ -99,7 +99,7 @@ export class Router extends BaseComponent {
     constructor(props) {
         super(props);
 
-        this.pushEffect(() => reaction(
+        this.useEffect(() => reaction(
             () => {
                 return currentRoute.currentLocation;
             },
@@ -168,7 +168,7 @@ export class Link extends BaseComponent {
     constructor(props) {
         super(props);
 
-        this.pushEffect(() => reaction(
+        this.useEffect(() => reaction(
             () => {
                 const { to, exact } = this.props;
                 const { currentRegExp, currentLocation } = currentRoute;
