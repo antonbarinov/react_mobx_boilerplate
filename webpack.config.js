@@ -86,7 +86,10 @@ module.exports = {
                     presets: [
                         [
                             '@babel/preset-env',
-                            { 'targets': { 'browsers': 'last 2 versions' } },
+                            {
+                                //'targets': { 'browsers': 'last 2 versions' }
+                                "targets": "> 0.25%, not dead"
+                            },
                         ],
                         '@babel/preset-react',
                     ],
