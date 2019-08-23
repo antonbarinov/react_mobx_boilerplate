@@ -16,7 +16,7 @@ export class BaseComponent extends React.Component {
                 reactOnComponentDidUpdate
             });
         } else {
-            throw new Error('Only functions can be passed into addEffect()');
+            throw new Error('Only functions can be passed into useEffect()');
         }
     };
 
