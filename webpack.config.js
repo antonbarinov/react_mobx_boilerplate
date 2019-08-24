@@ -1,9 +1,13 @@
 const webpack = require('webpack');
+// Plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const { DuplicatesPlugin } = require('inspectpack/plugin');
+// Plugins -- END
 const p = require('./package.json');
 
 const path = require('path');
@@ -162,6 +166,8 @@ module.exports = {
                 to: './assets',
             },
         ]),
+        new CaseSensitivePathsPlugin(),
+        new DuplicatesPlugin(),
         ...devPlugins,
         ...prodPlugins,
     ],
