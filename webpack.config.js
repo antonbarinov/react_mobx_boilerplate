@@ -14,7 +14,7 @@ const path = require('path');
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
 const NODE_ENV = process.env.NODE_ENV;
 const dev = NODE_ENV !== 'production';
-const hashType = dev ? '[hash]' : '[contenthash]';
+const hashType = dev ? '[contenthash]' : '[contenthash]';
 
 let devPlugins = [];
 let prodPlugins = [];
@@ -165,6 +165,10 @@ module.exports = {
                 from: './src/assets',
                 to: './assets',
             },
+            {
+                from: './src/move_this_static_files_to_root_dir',
+                to: './',
+            }
         ]),
         new CaseSensitivePathsPlugin(),
         new DuplicatesPlugin(),

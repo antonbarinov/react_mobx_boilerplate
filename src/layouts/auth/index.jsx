@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { BaseComponent } from 'components/BaseComponent';
 import { hookHandleInitialFetching } from 'hooks/layouts/hookHandleInitialFetching';
+import OfflineOverlay from 'components/OfflineOverlay';
 
 import styles from './styles.module.scss';
 
@@ -17,6 +18,7 @@ export default class AuthLayout extends BaseComponent {
     render() {
         return (
             <span>
+                <OfflineOverlay />
                 <div className={ styles.wrap }>
                     <div className={ styles.content_holder }>
                         <div>

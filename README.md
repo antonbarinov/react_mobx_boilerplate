@@ -7,6 +7,7 @@
 - Webpack 4.39+
 - Babel 7.5+
 - Custom reactive and user friendly MobX based router
+- Offline mode
 - Authorization
 - Forms validation helpers
 - Real API requests to backend
@@ -14,6 +15,7 @@
 - Production build with separate vendors modules and app bundle
 
 ### What this example can do?
+- Work in offline
 - Sign up page and logic
 - Sign in page and logic
 - Profile page

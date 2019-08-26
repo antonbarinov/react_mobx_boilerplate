@@ -14,7 +14,16 @@ export default class FormValidator {
         };
     }
 
-    applyServerValidationErrors(response) {
+    applyServerValidationErrors(e) {
+        let response;
+
+        try {
+            response = e.response.data;
+            if (response.errorType === undefined) return false;
+        } catch (e) {
+            return false;
+        }
+
         let result = false;
         // Validation errors
         if (response.errorType === 'validation') {

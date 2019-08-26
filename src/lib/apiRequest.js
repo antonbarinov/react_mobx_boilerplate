@@ -112,6 +112,9 @@ export default class ApiRequest {
 
         }
 
+        // Network connection error and there is no response object
+        if (response === undefined) throw error;
+
 
         /**
          * Not authorized

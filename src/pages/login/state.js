@@ -51,7 +51,7 @@ export default class {
                 }
             }
             catch (e) {
-                const errorsParsed = fv.applyServerValidationErrors(e.response.data);
+                const errorsParsed = fv.applyServerValidationErrors(e);
                 if (!errorsParsed) this.serverError = fv.serverErrorMessage || e.message;
             } finally {
                 this.submitInProgress = false;

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { BaseComponent } from 'components/BaseComponent';
 import { hookHandleInitialFetching } from 'hooks/layouts/hookHandleInitialFetching';
+import OfflineOverlay from 'components/OfflineOverlay';
 
 import Header from './header';
 import Footer from './footer';
@@ -25,6 +26,7 @@ export default class MainLayout extends BaseComponent {
 
         return (
             <span>
+                <OfflineOverlay />
                 <div className={ styles.wrap }>
                     <Header />
                     <div className={ styles.main }>
