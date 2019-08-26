@@ -11,7 +11,7 @@
 - Authorization
 - Forms validation helpers
 - Real API requests to backend
-- Basic layout with dynamic header and footer
+- Basic layout (auth and main) with dynamic header and footer
 - Production build with separate vendors modules and app bundle
 
 ### What this example can do?
