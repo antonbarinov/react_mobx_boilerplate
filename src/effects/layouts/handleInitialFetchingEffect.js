@@ -25,9 +25,7 @@ export function handleInitialFetchingEffect() {
         () => {
             return userState.initialFetching;
         },
-        () => {
-            handleInitialFetching();
-        });
+        handleInitialFetching);
 
     handleInitialFetching();
 
