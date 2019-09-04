@@ -1,4 +1,4 @@
-import { reaction } from 'mobx';
+import { autorun } from 'mobx';
 import userState from 'globalState/user';
 
 let timeout = null;
@@ -21,13 +21,5 @@ function handleInitialFetching() {
 
 // This effect fires only when component will unmount
 export function handleInitialFetchingEffect() {
-    const dispose = reaction(
-        () => {
-            return userState.initialFetching;
-        },
-        handleInitialFetching);
-
-    handleInitialFetching();
-
-    return dispose;
+    return autorun(handleInitialFetching);
 }
