@@ -9,11 +9,6 @@ import styles from './styles.module.scss';
 
 @observer
 export default class FormInput extends BaseComponent {
-    static propTypes = {
-        innerRef: PropTypes.elementType,
-        field: PropTypes.object,
-    };
-
     handleChange = formFieldsUniversalHandleChange.bind(this);
 
     render() {
@@ -33,3 +28,8 @@ export default class FormInput extends BaseComponent {
         />;
     }
 }
+
+FormInput.propTypes = {
+    innerRef: PropTypes.elementType,
+    field: PropTypes.object,
+};

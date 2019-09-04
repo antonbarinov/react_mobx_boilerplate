@@ -9,11 +9,6 @@ import styles from './styles.module.scss';
 
 @observer
 export default class FormTextarea extends BaseComponent {
-    static propTypes = {
-        innerRef: PropTypes.elementType,
-        field: PropTypes.object,
-    };
-
     elem = React.createRef();
 
     constructor(props) {
@@ -23,10 +18,10 @@ export default class FormTextarea extends BaseComponent {
             this.elem = props.innerRef;
         }
 
-        this.useEffect(this.computeTextareaHeight, true);
+        this.useEffect(this.computeTextareaHeightEffect, true);
     }
 
-    computeTextareaHeight = () => {
+    computeTextareaHeightEffect = () => {
         const el = this.elem.current;
         el.style.height = '';
         el.style.height = el.scrollHeight + 2 + 'px';
@@ -51,3 +46,8 @@ export default class FormTextarea extends BaseComponent {
         />;
     }
 }
+
+FormTextarea.propTypes = {
+    innerRef: PropTypes.elementType,
+    field: PropTypes.object,
+};

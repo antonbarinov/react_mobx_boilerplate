@@ -18,11 +18,10 @@ const localState = new State();
 
 @observer
 export default class SignUpPage extends BaseComponent {
+    state = localState;
+
     constructor(props) {
         super(props);
-
-        // or this.state = new State(); if we don't want to store last state of this component
-        this.state = localState;
 
         document.title = 'Signup Page | Boilerplate';
     }

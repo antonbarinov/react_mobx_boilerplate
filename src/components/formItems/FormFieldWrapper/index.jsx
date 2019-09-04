@@ -8,12 +8,6 @@ import styles from './styles.module.scss';
 
 @observer
 export default class FormFieldWrapper extends BaseComponent {
-    static propTypes = {
-        msg: PropTypes.string,
-        label: PropTypes.string,
-        field: PropTypes.object,
-    };
-
     static filterProps = (props) => {
         let result = {};
         for (const key in props) {
@@ -43,3 +37,9 @@ export default class FormFieldWrapper extends BaseComponent {
         );
     }
 }
+
+FormFieldWrapper.propTypes = {
+    msg: PropTypes.string,
+    label: PropTypes.string,
+    field: PropTypes.object,
+};

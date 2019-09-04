@@ -20,7 +20,7 @@ function handleInitialFetching() {
 }
 
 // This effect fires only when component will unmount
-export function hookHandleInitialFetching() {
+export function handleInitialFetchingEffect() {
     const dispose = reaction(
         () => {
             return userState.initialFetching;

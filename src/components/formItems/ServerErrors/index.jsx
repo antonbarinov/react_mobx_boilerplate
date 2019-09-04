@@ -8,10 +8,6 @@ import styles from './styles.module.scss';
 
 @observer
 export default class FormServerErrors extends BaseComponent {
-    static propTypes = {
-        msg: PropTypes.string,
-    };
-
     render() {
         const { msg } = this.props;
         if (!msg) return null;
@@ -23,3 +19,7 @@ export default class FormServerErrors extends BaseComponent {
         );
     }
 }
+
+FormServerErrors.propTypes = {
+    msg: PropTypes.string,
+};

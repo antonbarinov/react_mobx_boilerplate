@@ -11,7 +11,13 @@ export default class PrivateRoute extends BaseComponent {
     constructor(props) {
         super(props);
 
-        this.useEffect(() => reaction(
+        this.useEffect(this.privateCheckEffect);
+
+        this.reactionHandler();
+    }
+
+    privateCheckEffect = () => {
+        return reaction(
             () => {
                 const { children } = this.props;
                 const { initialFetching, user } = userState;
@@ -22,12 +28,8 @@ export default class PrivateRoute extends BaseComponent {
                     user,
                 ];
             },
-            () => {
-                this.reactionHandler();
-            }));
-
-        this.reactionHandler();
-    }
+            this.reactionHandler)
+    };
 
     reactionHandler = () => {
         const { initialFetching, user } = userState;

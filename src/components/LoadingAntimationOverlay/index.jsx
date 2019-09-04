@@ -9,10 +9,6 @@ import styles from './styles.module.scss';
 
 @observer
 export default class LoadingAnimationOverlay extends BaseComponent {
-    static propTypes = {
-        bluredContainerRef: PropTypes.object.isRequired,
-    };
-
     constructor(props) {
         super(props);
 
@@ -38,3 +34,7 @@ export default class LoadingAnimationOverlay extends BaseComponent {
         );
     }
 }
+
+LoadingAnimationOverlay.propTypes = {
+    bluredContainerRef: PropTypes.object.isRequired,
+};

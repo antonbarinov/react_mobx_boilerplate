@@ -9,10 +9,6 @@ import styles from './styles.module.scss';
 
 @observer
 export default class FormButton extends BaseComponent {
-    static propTypes = {
-        loading: PropTypes.any,
-    };
-
     getContent = () => {
         const { loading } = this.props;
 
@@ -43,3 +39,7 @@ export default class FormButton extends BaseComponent {
         );
     }
 }
+
+FormButton.propTypes = {
+    loading: PropTypes.any,
+};

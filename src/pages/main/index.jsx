@@ -2,7 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import { BaseComponent } from 'components/BaseComponent';
 import Container from 'components/Container';
-import { currentRoute, Router } from 'lib/router';
+import { currentRoute } from 'lib/router';
 
 import State from './state';
 
@@ -25,21 +25,19 @@ function updateTime() {
 
 @observer
 export default class MainPage extends BaseComponent {
+    state = localState;
+
     constructor(props) {
         super(props);
 
         document.title = 'Main Page | Boilerplate';
 
-        // or this.state = new State(); if we don't want to store last state of this component
-        this.state = localState;
-
         this.useEffect(updateTime.bind(this));
     }
 
     render() {
-        const { routeParams, currentLocation } = currentRoute;
+        const { routeParams, currentLocation, searchParams } = currentRoute;
         const { page } = routeParams;
-        const searchParams = currentRoute.searchParams;
         const state = this.state;
 
         return (

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { BaseComponent } from 'components/BaseComponent';
-import { hookHandleInitialFetching } from 'hooks/layouts/hookHandleInitialFetching';
+import { handleInitialFetchingEffect } from 'effects/layouts/handleInitialFetchingEffect';
 import OfflineOverlay from 'components/OfflineOverlay';
 
 import Header from './header';
@@ -17,7 +17,7 @@ export default class MainLayout extends BaseComponent {
     constructor(props) {
         super(props);
 
-        this.useEffect(hookHandleInitialFetching);
+        this.useEffect(handleInitialFetchingEffect);
     }
 
     render() {
