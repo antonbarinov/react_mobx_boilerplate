@@ -8,7 +8,6 @@ const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const { DuplicatesPlugin } = require('inspectpack/plugin');
 // Plugins -- END
-const p = require('./package.json');
 
 const path = require('path');
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
@@ -34,7 +33,6 @@ if (!dev) {
 module.exports = {
     mode: dev ? 'development' : 'production',
     entry: {
-        vendor: Object.keys(p.dependencies),
         bundle: [ './src/index.jsx' ],
     },
     output: {
