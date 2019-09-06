@@ -1,16 +1,18 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 
 import styles from './styles.module.scss';
 
+import State from './state';
 
-const ReactFunctionalComponent = observer((props) => {
+export default function ReactFunctionalComponent(props) {
+    const [ state ] = useState(new State());
+
     return (
         <div className={ styles.ComponentName }>
             <h1>Hello world</h1>
         </div>
     );
-});
+};
 
-
-export default ReactFunctionalComponent;
+ReactFunctionalComponent = observer(ReactFunctionalComponent);

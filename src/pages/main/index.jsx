@@ -1,54 +1,41 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { BaseComponent } from 'components/BaseComponent';
 import Container from 'components/Container';
 import { currentRoute } from 'lib/router';
 
 import State from './state';
 
-const localState = new State();
+export default function MainPage() {
+    const [ state ] = useState(new State());
 
-function updateTime() {
-    const state = this.state;
-
-    const interval = setInterval(() => {
-        state.time = new Date().toISOString();
-    }, 100);
-
-    // Return cleanup function if need
-    return () => {
-        clearInterval(interval);
-    };
-}
-
-
-
-@observer
-export default class MainPage extends BaseComponent {
-    state = localState;
-
-    constructor(props) {
-        super(props);
-
+    // Update time
+    useEffect(() => {
         document.title = 'Main Page | Boilerplate';
 
-        this.useEffect(updateTime.bind(this));
-    }
+        const interval = setInterval(() => {
+            state.time = new Date().toISOString();
+        }, 100);
 
-    render() {
-        const { routeParams, currentLocation, searchParams } = currentRoute;
-        const { page } = routeParams;
-        const state = this.state;
+        return () => {
+            clearInterval(interval);
+        };
+    }, []);
 
-        return (
-            <Container>
-                <h1>{ state.title }</h1>
-                <input value={ state.title } onChange={ state.handleTitleChange } />
-                { page && <h3>Route param "page": { page }</h3> }
-                <div>This time is { state.time }</div>
-                <div>Hash: { currentLocation.location.hash }</div>
-                <div>searchParams: { JSON.stringify(searchParams) }</div>
-            </Container>
-        );
-    }
+
+    const { routeParams, currentLocation, searchParams } = currentRoute;
+    const { page } = routeParams;
+
+    return (
+        <Container>
+            <h1>{ state.title }</h1>
+            <input value={ state.title } onChange={ state.handleTitleChange } />
+            { page && <h3>Route param "page": { page }</h3> }
+            <div>This time is { state.time }</div>
+            <div>Hash: { currentLocation.location.hash }</div>
+            <div>searchParams: { JSON.stringify(searchParams) }</div>
+        </Container>
+    );
+
 }
+
+MainPage = observer(MainPage);
