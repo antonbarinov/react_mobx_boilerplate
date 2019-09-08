@@ -24,6 +24,7 @@ if (dev) {
 }
 if (!dev) {
     prodPlugins = [
+        new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
@@ -168,7 +169,6 @@ module.exports = {
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: 'defer'
         }),
-        new CleanWebpackPlugin(),
         new CopyWebpackPlugin([
             {
                 from: './src/assets',
