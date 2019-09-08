@@ -1,10 +1,13 @@
-module.exports = {
-    //parser: 'sugarss',
+module.exports = (ctx) => ({
+    parser: false,
+    map: ctx.env === 'development' ? ctx.map : false,
     plugins: {
-        'postcss-import': {},
-        'postcss-cssnext': {
-            warnForDuplicates: false
+        'postcss-preset-env': {
+            autoprefixer: {
+                grid: "autoplace"
+            },
         },
-        //'cssnano': {}
+        'postcss-import': {},
+        cssnano: ctx.env === 'production' ? {} : false,
     }
-};
+});
