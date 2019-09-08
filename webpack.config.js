@@ -13,11 +13,15 @@ const path = require('path');
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
 const NODE_ENV = process.env.NODE_ENV;
 const dev = NODE_ENV !== 'production';
-const hashType = dev ? '[contenthash]' : '[contenthash]';
+const hashType = dev ? '[hash]' : '[contenthash]';
 
 let devPlugins = [];
 let prodPlugins = [];
-if (dev) devPlugins = [];
+if (dev) {
+    devPlugins = [
+        new webpack.HotModuleReplacementPlugin(),
+    ];
+}
 if (!dev) {
     prodPlugins = [
         new MiniCssExtractPlugin({
@@ -52,8 +56,8 @@ module.exports = {
         open: true,
         historyApiFallback: true,
         disableHostCheck: true,
-        hot: false,
-        inline: false, // disable auto page reload
+        hot: true,
+        liveReload: false,
         publicPath: '/',
         contentBase: path.join(__dirname, 'src'),
     },
@@ -136,7 +140,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: '[hash]__[name].[ext]',
+                            name: `[name]__${hashType}.[ext]`,
                             outputPath: './assets/file-loader/',
                             publicPath: '',
                         },

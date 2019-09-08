@@ -5,7 +5,7 @@ import { smartRedirect } from 'helpers/redirect';
 import { withOnlyOneInTime } from 'helpers/asyncHelpers';
 
 
-export default class {
+export default class SignUpPageState {
     @observable formFields = {
         login: FormValidator.createFormFieldObj(),
         password: FormValidator.createFormFieldObj(),

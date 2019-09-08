@@ -1,3 +1,4 @@
+import 'react-hot-loader';
 import '@babel/polyfill'; // Need for async/await
 
 import * as React from 'react';
@@ -5,7 +6,7 @@ import * as ReactDOM from 'react-dom';
 
 import App from './App';
 
-import './index.css';
+import 'index.scss';
 
 
 ReactDOM.render(
@@ -13,7 +14,7 @@ ReactDOM.render(
     document.getElementById('root'),
 );
 
-
+/*
 // Register service workers
 if (navigator.serviceWorker) {
     window.addEventListener('load', () => {
@@ -22,4 +23,4 @@ if (navigator.serviceWorker) {
                  .then(reg => console.log('Service Worker: Registered (Caching site)'))
                  .catch(err => console.log(`Service Worker: Error: ${err}`));
     });
-}
+}*/

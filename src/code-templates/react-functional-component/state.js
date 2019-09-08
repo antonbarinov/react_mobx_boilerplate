@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
 
-export default class {
+export default class ReactFunctionalComponentState {
 
 }

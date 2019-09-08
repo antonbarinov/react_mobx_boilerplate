@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { observer } from 'mobx-react';
 import Container from 'components/Container';
 
 import styles from './styles.module.scss';
@@ -11,3 +12,5 @@ export default function NotFoundPage() {
         </Container>
     );
 }
+
+NotFoundPage = observer(NotFoundPage);

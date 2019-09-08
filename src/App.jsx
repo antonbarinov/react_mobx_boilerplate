@@ -1,10 +1,13 @@
+import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
 
 import Routes from './Routes';
 
 
-export default function App() {
+const App = () => {
     return (
         <Routes />
     );
-}
+};
+
+export default hot(App);
