@@ -1,19 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
-import { BaseComponent } from 'components/BaseComponent';
 
 import styles from './styles.module.scss';
 
 
-@observer
-export default class Container extends BaseComponent {
-    render() {
-        const { children, innerRef, ...props } = this.props;
-
-        return (
-            <div className={ styles.container } ref={ innerRef } { ...props } >
-                { children }
-            </div>
-        );
-    }
+export default function Container({ children, ...props }, ref) {
+    return (
+        <div className={ styles.container } ref={ ref } { ...props } >
+            { children }
+        </div>
+    );
 }
+
+Container = observer(React.forwardRef(Container));
