@@ -144,12 +144,12 @@ module.exports = {
                 use: [ 'raw-loader' ],
             },
             {
-                test: /\.(png|jpg|jpeg|gif)$/,
+                test: /\.(png|jpg|jpeg|gif|webp)$/,
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
-                            name: `[name]__${hashType}.[ext]`,
+                            name: `[path]__[name]__${hashType}.[ext]`,
                             outputPath: './assets/file-loader/',
                             publicPath: '',
                         },
