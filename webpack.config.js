@@ -110,7 +110,7 @@ module.exports = {
                     {
                         loader: 'css-loader',
                         options: {
-                            importLoaders: 1,
+                            importLoaders: 3,
                             modules: {
                                 localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
                             },
@@ -130,6 +130,7 @@ module.exports = {
                     {
                         loader: 'css-loader',
                         options: {
+                            importLoaders: 3,
                             sourceMap: dev
                         },
                     },
