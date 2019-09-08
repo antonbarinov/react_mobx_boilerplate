@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 // Plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
@@ -110,8 +110,9 @@ module.exports = {
                         loader: 'css-loader',
                         options: {
                             importLoaders: 1,
-                            modules: true,
-                            localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
+                            modules: {
+                                localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
+                            },
                         },
                     },
                     'resolve-url-loader',
@@ -161,7 +162,7 @@ module.exports = {
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: 'defer'
         }),
-        new CleanWebpackPlugin([ 'dist' ]),
+        new CleanWebpackPlugin(),
         new CopyWebpackPlugin([
             {
                 from: './src/assets',
