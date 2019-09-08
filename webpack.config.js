@@ -113,6 +113,7 @@ module.exports = {
                             modules: {
                                 localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
                             },
+                            sourceMap: dev
                         },
                     },
                     'resolve-url-loader',
@@ -125,7 +126,12 @@ module.exports = {
                 exclude: /\.module\.(c|sa|sc)ss$/,
                 use: [
                     dev ? 'style-loader' : MiniCssExtractPlugin.loader,
-                    'css-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: dev
+                        },
+                    },
                     'resolve-url-loader',
                     'postcss-loader',
                     'sass-loader',
