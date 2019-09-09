@@ -3,11 +3,12 @@
     "baseUrl": "./src",
     "target": "es2018",
     "experimentalDecorators": true,
-    "checkJs": true
+    "checkJs": true,
+    "jsx": "react",
+    "moduleResolution": "node"
   },
   "exclude": [],
   "include": [
-    "node_mobules",
     "./src"
   ]
 }
