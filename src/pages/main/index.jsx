@@ -35,7 +35,6 @@ export default function MainPage() {
             <div>searchParams: { JSON.stringify(searchParams) }</div>
         </Container>
     );
-
 }
 
 MainPage = observer(MainPage);
