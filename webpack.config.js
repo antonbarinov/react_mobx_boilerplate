@@ -67,6 +67,9 @@ module.exports = {
     devtool: dev ? 'source-map' : 'none',
 
     resolve: {
+        alias: {
+            'react-dom': '@hot-loader/react-dom'
+        },
         extensions: [
             '.js',
             '.jsx',

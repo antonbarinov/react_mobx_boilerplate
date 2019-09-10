@@ -26,14 +26,13 @@
 
 ## Run
 ```
-npm i -g yarn
-yarn
-yarn start
+npm install
+npm start
 ```
 Browser will be opened
 
 ## Build
 ```
-yarn run build:prod
-yarn run build:dev
+npm run build:prod
+npm run build:dev
 ```
