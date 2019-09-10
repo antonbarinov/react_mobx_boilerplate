@@ -26,13 +26,19 @@
 
 ## Run
 ```
-npm install
-npm start
+npm i -g yarn
+yarn install
+yarn start
 ```
 Browser will be opened
 
 ## Build
 ```
-npm run build:prod
-npm run build:dev
+yarn run build:prod
+yarn run build:dev
+```
+
+## Windows possible problems with build node-sass or etc.
+```
+Try to install 32bit version of node.js
 ```

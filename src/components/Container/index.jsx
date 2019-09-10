@@ -4,12 +4,12 @@ import { observer } from 'mobx-react';
 import styles from './styles.module.scss';
 
 
-export default function Container({ children, ...props }, ref) {
+export default function Container({ children, ...props }) {
     return (
-        <div className={ styles.container } ref={ ref } { ...props } >
+        <div className={ styles.container } { ...props } >
             { children }
         </div>
     );
 }
 
-Container = observer(React.forwardRef(Container));
+Container = observer(Container);
