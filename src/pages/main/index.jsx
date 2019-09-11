@@ -14,7 +14,7 @@ export default function MainPage() {
 
         const interval = setInterval(() => {
             state.time = new Date().toISOString();
-        }, 100);
+        }, 10);
 
         return () => {
             clearInterval(interval);
