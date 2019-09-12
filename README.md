@@ -6,7 +6,7 @@
 - React-MobX 6.1+
 - Webpack 4.39+
 - Babel 7.5+
-- Hot Module Replacement (with hooks support)
+- React Hot Loader
 - Custom reactive and user friendly MobX based router
 - Offline mode
 - Authorization
@@ -36,9 +36,4 @@ Browser will be opened
 ```
 yarn run build:prod
 yarn run build:dev
-```
-
-## Windows possible problems with build node-sass or etc.
-```
-Try to install 32bit version of node.js
 ```
