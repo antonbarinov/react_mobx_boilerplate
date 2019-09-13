@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default function useScrollHeight(scrollContainerRef, cb) {
+export default function useScroll(scrollContainerRef, cb) {
     useEffect(() => {
         const scrollContainer = scrollContainerRef.current;
 

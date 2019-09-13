@@ -18,7 +18,7 @@ export default function useOutSideClick(elemRef, cb) {
         const elemToFind = elemRef.current || elemRef;
 
         const handleClick = (e) => {
-            if (!closest(e.target, elemToFind)) cb();
+            if (!closest(e.target, elemToFind)) cb(e);
         };
 
         window.addEventListener('click', handleClick);
