@@ -26,11 +26,16 @@ window.addEventListener('popstate', () => {
     currentRoute.setCurrentRoute();
 });
 
-export function redirect(to, title = '') {
+export function redirect(to, replace = false, title = '') {
     const currentFullPath = window.location.href.substr(window.location.origin.length);
     if (currentFullPath === to) return;
 
-    history.pushState({}, title, to);
+    if (replace) {
+        history.replaceState({}, title, to);
+    } else {
+        history.pushState({}, title, to);
+    }
+
     currentRoute.setCurrentRoute();
 }
 
@@ -88,6 +93,7 @@ export const currentRoute = new CurrentRoute();
  * Props explanation:
  * routes - key-value object where key is route and value is what must to rendered. If key is "" that means Page not found
  * global - mark router as global for populate currentRoute.routeParams and currentRoute.currentRegExp
+ * hashMode - hash router instead of regular url's
  */
 @observer
 export class Router extends BaseComponent {
@@ -109,10 +115,12 @@ export class Router extends BaseComponent {
     }
 
     navigate() {
-        const { routes, global } = this.props;
+        const { routes, global, hashMode } = this.props;
         let result = routes[''] || routes['*'] || null;
 
         let isRouteFound = false;
+
+        const path = hashMode ? currentRoute.currentLocation.location.hash.substr(1) : currentRoute.currentLocation.path;
 
         for (const route in routes) {
             if (!routes.hasOwnProperty(route)) continue;
@@ -121,7 +129,7 @@ export class Router extends BaseComponent {
 
             const keys = [];
             const regexp = pathToRegexp(route, keys);
-            const res = exec(regexp, currentRoute.currentLocation.path, keys);
+            const res = exec(regexp, path, keys);
 
             if (res) {
                 isRouteFound = true;
