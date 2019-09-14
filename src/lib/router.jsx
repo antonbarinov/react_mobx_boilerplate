@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import { action, observable, reaction } from 'mobx';
 import pathToRegexp from 'path-to-regexp';
 import { BaseComponent } from 'components/BaseComponent';
+import mutateObject from 'helpers/mutateObject';
 
 function exec(re, str, keys = []) {
     const match = re.exec(str);
@@ -35,7 +36,6 @@ export function redirect(to, title = '') {
 
 
 class CurrentRoute {
-    routesHistory = [];
     @observable currentLocation = {
         path: '',
         fullPath: '',
@@ -55,7 +55,6 @@ class CurrentRoute {
     @observable routeParams = {};
     @observable.ref currentRegExp = null;
     @observable searchParams = {};
-    prevLocation = null;
 
     constructor() {
         this.setCurrentRoute();
@@ -63,14 +62,13 @@ class CurrentRoute {
 
     @action setCurrentRoute = () => {
         const windowLocation = JSON.parse(JSON.stringify(window.location));
-        if (this.prevLocation === JSON.stringify(windowLocation)) return false;
-        this.prevLocation = JSON.stringify(windowLocation);
 
         let path = windowLocation.pathname;
         let fullPath = path + windowLocation.search;
 
         const parsedURL = new URL(windowLocation.href);
-        this.searchParams = Object.fromEntries(parsedURL.searchParams.entries());
+        const searchParams = Object.fromEntries(parsedURL.searchParams.entries());
+        mutateObject(this.searchParams, searchParams);
 
         const route = {
             path,
@@ -78,8 +76,7 @@ class CurrentRoute {
             location: windowLocation,
         };
 
-        this.routesHistory.push(route);
-        this.currentLocation = route;
+        mutateObject(this.currentLocation, route);
     }
 }
 
@@ -101,7 +98,7 @@ export class Router extends BaseComponent {
 
         this.useEffect(() => reaction(
             () => {
-                return currentRoute.currentLocation;
+                return JSON.stringify(currentRoute.currentLocation);
             },
             () => {
                 this.navigate();
@@ -132,7 +129,7 @@ export class Router extends BaseComponent {
 
                 // Set global route params only from global router, not from local
                 if (global) {
-                    currentRoute.routeParams = res;
+                    mutateObject(currentRoute.routeParams, res);
                     currentRoute.currentRegExp = regexp;
                 }
 
@@ -141,7 +138,7 @@ export class Router extends BaseComponent {
         }
 
         if (!isRouteFound) {
-            currentRoute.routeParams = {};
+            mutateObject(currentRoute.routeParams, {});
             currentRoute.currentRegExp = pathToRegexp(currentRoute.currentLocation.path, []);
         }
 

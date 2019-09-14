@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { Router } from 'lib/router';
-import { BaseComponent } from 'components/BaseComponent';
 import PrivateRoute from 'components/PrivateRoute';
 
 import MainPage from 'pages/main';
@@ -18,15 +17,14 @@ const authorizationRoutes = {
 };
 
 
-@observer
-export default class Routes extends BaseComponent {
-    render() {
-        return <Router global routes={ {
-            '/': <MainLayout><MainPage /></MainLayout>,
-            '/page/:page': <MainLayout><MainPage /></MainLayout>,
-            ...authorizationRoutes,
-            '/profile': <PrivateRoute><MainLayout><ProfilePage /></MainLayout></PrivateRoute>,
-            '': <MainLayout><NotFoundPage /></MainLayout>,
-        } } />;
-    }
+export default function Routes() {
+    return <Router global routes={ {
+        '/': <MainLayout><MainPage /></MainLayout>,
+        '/page/:page': <MainLayout><MainPage /></MainLayout>,
+        ...authorizationRoutes,
+        '/profile': <PrivateRoute><MainLayout><ProfilePage /></MainLayout></PrivateRoute>,
+        '': <MainLayout><NotFoundPage /></MainLayout>,
+    } } />;
 }
+
+Routes = observer(Routes);
