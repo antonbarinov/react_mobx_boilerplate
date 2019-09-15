@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { observer } from 'mobx-react';
 import { action, observable, reaction } from 'mobx';
 import pathToRegexp from 'path-to-regexp';
-import { BaseComponent } from 'components/BaseComponent';
 import mutateObject from 'helpers/mutateObject';
 
 function exec(re, str, keys = []) {
@@ -193,47 +192,39 @@ Router = observer(Router);
  * dontIgnoreHash - Don't ignore hash when exact active
  * grabActive - callback function that tells is link active or not
  */
-@observer
-export class Link extends BaseComponent {
-    @observable active = false;
+export function Link({ to, exact, dontIgnoreHash, grabActive, activeClass, children, className, ...restProps }) {
+    const [ state ] = useState(new class {
+        @observable active = false;
+    });
 
-    constructor(props) {
-        super(props);
+    useEffect(() => reaction(
+        () => {
+            const { currentRegExp, currentLocation } = currentRoute;
 
-        this.useEffect(() => reaction(
-            () => {
-                const { to, exact } = this.props;
-                const { currentRegExp, currentLocation } = currentRoute;
+            return [
+                to,
+                exact,
+                currentLocation,
+                currentRegExp,
+            ];
+        },
+        () => {
+            calcActive();
+        }
+    ), []);
 
-                return [
-                    to,
-                    exact,
-                    currentLocation,
-                    currentRegExp,
-                ];
-            },
-            () => {
-                this.calcActive();
-            }
-        ));
-
-        this.calcActive();
-    }
-
-    handleClick = e => {
+    const handleClick = useCallback((e) => {
         e.preventDefault();
-        const { to } = this.props;
 
         redirect(to);
-    };
+    }, []);
 
-    calcActive = () => {
-        const { to, exact, dontIgnoreHash, grabActive } = this.props;
+    const calcActive = useCallback(() => {
         const { currentRegExp, currentLocation } = currentRoute;
 
         let active = false;
         if (exact) {
-            if (dontIgnoreHash) {
+            if (dontIgnoreHash && !currentRoute.hashMode) {
                 active = to === currentLocation.fullPath + currentLocation.location.hash;
             }
             else {
@@ -244,25 +235,30 @@ export class Link extends BaseComponent {
             active = true;
         }
 
-        if (active !== this.active) {
-            this.active = active;
+        if (active !== state.active) {
+            state.active = active;
             grabActive && grabActive(active);
         }
-    };
+    }, []);
 
-    render() {
-        const { to, children, dontIgnoreHash, grabActive, exact, ...restProps } = this.props;
-        const { active } = this;
+    useState(() => calcActive());
 
-        return (
-            <a
-                { ...restProps }
-                href={ to }
-                data-active={ active }
-                onClick={ this.handleClick }
-            >
-                { children }
-            </a>
-        );
-    }
+    let classNames = [];
+    if (className) classNames.push(className);
+    if (activeClass && state.active) classNames.push(activeClass);
+    classNames = classNames.join(' ');
+
+    return (
+        <a
+            { ...restProps }
+            className={ classNames }
+            href={ to }
+            data-active={ state.active }
+            onClick={ handleClick }
+        >
+            { children }
+        </a>
+    );
 }
+
+Link = observer(Link);

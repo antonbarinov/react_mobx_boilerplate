@@ -26,5 +26,9 @@
         &[data-active="true"] {
             text-decoration: underline;
         }
+
+        &.active {
+            font-size: 20px;
+        }
     }
 }
