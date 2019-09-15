@@ -10,12 +10,11 @@ import FormFieldWrapper from 'components/formItems/FormFieldWrapper';
 
 import styles from './styles.module.scss';
 
-import State from './state';
+import { useLocalState } from './state';
 
-const localState = new State();
 
 export default function SignUpPage() {
-    const [ state ] = useState(localState);
+    const state = useLocalState();
     const bluredContainer = useRef();
 
     useEffect(() => {

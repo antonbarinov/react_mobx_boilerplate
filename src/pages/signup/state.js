@@ -1,11 +1,12 @@
 import { observable } from 'mobx';
+import { useState } from 'react';
 import FormValidator from 'helpers/formValidator';
 import userState from 'globalState/user';
 import { smartRedirect } from 'helpers/redirect';
 import { withOnlyOneInTime } from 'helpers/asyncHelpers';
 
 
-export default class SignUpPageState {
+class SignUpPageState {
     @observable formFields = {
         login: FormValidator.createFormFieldObj(),
         password: FormValidator.createFormFieldObj(),
@@ -73,3 +74,12 @@ export default class SignUpPageState {
         this.formFields[name].value = value;
     };
 }
+
+/**
+ * @returns {SignUpPageState}
+ */
+export const useLocalState = () => {
+    const [ state ] = useState(new SignUpPageState());
+
+    return state;
+};

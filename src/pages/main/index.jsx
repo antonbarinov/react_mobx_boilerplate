@@ -3,10 +3,11 @@ import { observer } from 'mobx-react';
 import Container from 'components/Container';
 import { currentRoute } from 'lib/router';
 
-import State from './state';
+import { useLocalState } from './state';
+
 
 export default function MainPage() {
-    const [ state ] = useState(new State());
+    const state = useLocalState();
 
     // Update time
     useEffect(() => {

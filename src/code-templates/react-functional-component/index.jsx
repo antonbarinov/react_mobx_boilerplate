@@ -3,10 +3,10 @@ import { observer } from 'mobx-react';
 
 import styles from './styles.module.scss';
 
-import State from './state';
+import { useLocalState } from './state';
 
 export default function ReactFunctionalComponent(props) {
-    const [ state ] = useState(new State());
+    const state = useLocalState();
 
     return (
         <div className={ styles.ComponentName }>

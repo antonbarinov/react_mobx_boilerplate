@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
+import { useState } from 'react';
 
-export default class MainPageState {
+class MainPageState {
     @observable time = new Date().toISOString();
     @observable title = 'Main page';
 
@@ -9,3 +10,12 @@ export default class MainPageState {
         this.title = e.target.value;
     }
 }
+
+/**
+ * @returns {MainPageState}
+ */
+export const useLocalState = () => {
+    const [ state ] = useState(new MainPageState());
+
+    return state;
+};
