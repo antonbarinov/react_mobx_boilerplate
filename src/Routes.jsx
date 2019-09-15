@@ -16,15 +16,17 @@ const authorizationRoutes = {
     '/signup': <AuthLayout><SignUpPage /></AuthLayout>,
 };
 
+const routes = {
+    '/': <MainLayout><MainPage /></MainLayout>,
+    '/page/:page': <MainLayout><MainPage /></MainLayout>,
+    ...authorizationRoutes,
+    '/profile': <PrivateRoute><MainLayout><ProfilePage /></MainLayout></PrivateRoute>,
+    '': <MainLayout><NotFoundPage /></MainLayout>,
+};
+
 
 export default function Routes() {
-    return <Router global routes={ {
-        '/': <MainLayout><MainPage /></MainLayout>,
-        '/page/:page': <MainLayout><MainPage /></MainLayout>,
-        ...authorizationRoutes,
-        '/profile': <PrivateRoute><MainLayout><ProfilePage /></MainLayout></PrivateRoute>,
-        '': <MainLayout><NotFoundPage /></MainLayout>,
-    } } />;
+    return <Router global routes={ routes } />;
 }
 
 Routes = observer(Routes);

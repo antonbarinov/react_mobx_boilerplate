@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { observer } from 'mobx-react';
 import { action, observable, reaction } from 'mobx';
 import pathToRegexp from 'path-to-regexp';
@@ -22,13 +22,16 @@ function exec(re, str, keys = []) {
     return result;
 }
 
-window.addEventListener('popstate', () => {
-    currentRoute.setCurrentRoute();
-});
+
+window.addEventListener('popstate', () => currentRoute.setCurrentRoute());
+window.addEventListener('hashchange', () => currentRoute.setCurrentRoute());
+
 
 export function redirect(to, replace = false, title = '') {
     const currentFullPath = window.location.href.substr(window.location.origin.length);
     if (currentFullPath === to) return;
+
+    if (currentRoute.hashMode) to = '#' + to;
 
     if (replace) {
         history.replaceState({}, title, to);
@@ -60,18 +63,28 @@ class CurrentRoute {
     @observable routeParams = {};
     @observable.ref currentRegExp = null;
     @observable searchParams = {};
+    @observable hashMode = false;
 
     constructor() {
         this.setCurrentRoute();
     }
 
     @action setCurrentRoute = () => {
-        const windowLocation = JSON.parse(JSON.stringify(window.location));
+        const windowLocation = window.location;
 
-        let path = windowLocation.pathname;
-        let fullPath = path + windowLocation.search;
+        let path, fullPath;
 
-        const parsedURL = new URL(windowLocation.href);
+        if (this.hashMode) {
+            const hashPath = windowLocation.hash.substr(1);
+            const parsedURL = new URL(hashPath, windowLocation.origin);
+            path = parsedURL.pathname;
+            fullPath = hashPath;
+        } else {
+            path = windowLocation.pathname;
+            fullPath = path + windowLocation.search;
+        }
+
+        const parsedURL = new URL(fullPath,  windowLocation.origin);
         const searchParams = Object.fromEntries(parsedURL.searchParams.entries());
         mutateObject(this.searchParams, searchParams);
 
@@ -88,6 +101,7 @@ class CurrentRoute {
 
 export const currentRoute = new CurrentRoute();
 
+let globalRoutersCount = 0;
 
 /**
  * Props explanation:
@@ -95,32 +109,17 @@ export const currentRoute = new CurrentRoute();
  * global - mark router as global for populate currentRoute.routeParams and currentRoute.currentRegExp
  * hashMode - hash router instead of regular url's
  */
-@observer
-export class Router extends BaseComponent {
-    @observable.ref currentComponent = null;
+export function Router({ routes, global, hashMode }) {
+    const [ state ] = useState(new class {
+        @observable.ref currentComponent = null;
+    });
 
-    constructor(props) {
-        super(props);
-
-        this.useEffect(() => reaction(
-            () => {
-                return JSON.stringify(currentRoute.currentLocation);
-            },
-            () => {
-                this.navigate();
-            }
-        ));
-
-        this.navigate();
-    }
-
-    navigate() {
-        const { routes, global, hashMode } = this.props;
+    const navigate = useCallback(() => {
         let result = routes[''] || routes['*'] || null;
 
         let isRouteFound = false;
 
-        const path = hashMode ? currentRoute.currentLocation.location.hash.substr(1) : currentRoute.currentLocation.path;
+        const { path } = currentRoute.currentLocation;
 
         for (const route in routes) {
             if (!routes.hasOwnProperty(route)) continue;
@@ -150,13 +149,41 @@ export class Router extends BaseComponent {
             currentRoute.currentRegExp = pathToRegexp(currentRoute.currentLocation.path, []);
         }
 
-        this.currentComponent = result;
-    }
+        state.currentComponent = result;
+    }, []);
 
-    render() {
-        return this.currentComponent;
-    }
+    useEffect(() => {
+        if (global) globalRoutersCount++;
+        if (globalRoutersCount > 1) throw new Error(`Only 1 router exemplar can be global`);
+
+        const disposer = reaction(
+            () => {
+                return JSON.stringify(currentRoute.currentLocation);
+            },
+            () => {
+                navigate();
+            }
+        );
+
+        return () => {
+            disposer();
+            globalRoutersCount--;
+        };
+    }, []);
+
+    useState(() => {
+        currentRoute.hashMode = !!hashMode;
+        if (hashMode && window.location.hash === '') window.location.hash = '/';
+        currentRoute.setCurrentRoute();
+    }, [ hashMode ]);
+
+    useState(() => navigate());
+
+
+    return state.currentComponent;
 }
+
+Router = observer(Router);
 
 
 /**
