@@ -104,7 +104,7 @@ let globalRoutersCount = 0;
 
 /**
  * Props explanation:
- * routes - key-value object where key is route and value is what must to rendered. If key is "" that means Page not found
+ * routes - key-value object where key is route and value is what must to rendered. If key is "" or "*" that means Page not found
  * global - mark router as global for populate currentRoute.routeParams and currentRoute.currentRegExp
  * hashMode - hash router instead of regular url's
  */
