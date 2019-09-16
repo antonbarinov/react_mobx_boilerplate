@@ -6,7 +6,7 @@ import { currentRoute } from 'lib/router';
 import { useLocalState } from './state';
 
 /**
- * @param state {MainPageState}
+ * @param {MainPageState} state
  * @returns {Function}
  */
 const updateTimeEffect = (state) => () => {

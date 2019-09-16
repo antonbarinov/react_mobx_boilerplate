@@ -37,6 +37,11 @@ function stillActualChecker(context, key) {
     };
 }
 
+/**
+ * @param {Object} context
+ * @param {string} key
+ * @param {function} func
+ */
 export function withOnlyOneInTime(context, key, func) {
     (async () => {
         key += '__withOnlyOneInTime';
@@ -55,6 +60,16 @@ export function withOnlyOneInTime(context, key, func) {
     })();
 }
 
+/**
+ * @callback withAsyncHelpersDebounceFunction
+ * @param ms {number}
+ * @returns Promise<boolean>
+ */
+/**
+ * @param context
+ * @param {string} key
+ * @param { function({ stillActualCheckpoint: {function(): Promise<boolean>}, debounce: withAsyncHelpersDebounceFunction }) } func
+ */
 export function withAsyncHelpers(context, key, func) {
     (async () => {
         const stillActualCheckpoint = stillActualChecker(context, key);
