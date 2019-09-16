@@ -38,6 +38,7 @@ function stillActualChecker(context, key) {
 }
 
 /**
+ * Don't exec "func" if other "func" in progress yet
  * @param {Object} context
  * @param {string} key
  * @param {function} func
@@ -61,12 +62,14 @@ export function withOnlyOneInTime(context, key, func) {
 }
 
 /**
+ * Debounce function
  * @callback withAsyncHelpersDebounceFunction
- * @param ms {number}
+ * @param {number} [ms=300]
  * @returns Promise<boolean>
  */
 /**
- * @param context
+ * Use helpers for typical async operations
+ * @param {Object} context
  * @param {string} key
  * @param { function({ stillActualCheckpoint: {function(): Promise<boolean>}, debounce: withAsyncHelpersDebounceFunction }) } func
  */
