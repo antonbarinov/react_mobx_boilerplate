@@ -5,22 +5,28 @@ import { currentRoute } from 'lib/router';
 
 import { useLocalState } from './state';
 
+/**
+ * @param state {MainPageState}
+ * @returns {Function}
+ */
+const updateTimeEffect = (state) => () => {
+    document.title = 'Main Page | Boilerplate';
+
+    const interval = setInterval(() => {
+        state.time = new Date().toISOString();
+    }, 10);
+
+    return () => {
+        clearInterval(interval);
+    };
+};
+
 
 export default function MainPage() {
     const state = useLocalState();
 
     // Update time
-    useEffect(() => {
-        document.title = 'Main Page | Boilerplate';
-
-        const interval = setInterval(() => {
-            state.time = new Date().toISOString();
-        }, 10);
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, []);
+    useEffect(updateTimeEffect(state), []);
 
 
     const { routeParams, currentLocation, searchParams } = currentRoute;
