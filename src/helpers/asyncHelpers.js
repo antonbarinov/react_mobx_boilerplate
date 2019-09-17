@@ -71,7 +71,7 @@ export function withOnlyOneInTime(context, key, func) {
  * Use helpers for typical async operations
  * @param {Object} context
  * @param {string} key
- * @param { function({ stillActualCheckpoint: {function(): Promise<boolean>}, debounce: withAsyncHelpersDebounceFunction }) } func
+ * @param { function({ stillActualCheckpoint: {function(): void}, debounce: withAsyncHelpersDebounceFunction }) } func
  */
 export function withAsyncHelpers(context, key, func) {
     (async () => {
