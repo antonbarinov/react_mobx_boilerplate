@@ -1,5 +1,18 @@
 import { useEffect } from 'react';
 
+/**
+ * useScroll callback function
+ * @callback useScrollCallback
+ * @param e
+ * @param {number} maxScrollTop
+ * @param {number} scrollTop
+ */
+
+/**
+ * Handle scroll event on element with helpers calculations
+ * @param scrollContainerRef
+ * @param {useScrollCallback} cb
+ */
 export default function useScroll(scrollContainerRef, cb) {
     useEffect(() => {
         const scrollContainer = scrollContainerRef.current;
@@ -19,4 +32,3 @@ export default function useScroll(scrollContainerRef, cb) {
         };
     }, []);
 };
-
