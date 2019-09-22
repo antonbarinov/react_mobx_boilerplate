@@ -9,7 +9,7 @@ export default function AuthLayout({ children }) {
     useLayoutGlobalLoader();
 
     return (
-        <span>
+        <>
             <OfflineOverlay />
             <div className={ styles.wrap }>
                 <div className={ styles.content_holder }>
@@ -18,7 +18,7 @@ export default function AuthLayout({ children }) {
                     </div>
                 </div>
             </div>
-        </span>
+        </>
     );
 }
 

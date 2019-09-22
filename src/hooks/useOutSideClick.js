@@ -1,24 +1,10 @@
 import { useEffect } from 'react';
 
-function closest(currentElem, elemToFind) {
-    if (currentElem === elemToFind) return true;
-
-    let parent = currentElem.parentNode;
-    while (parent) {
-        if (parent === elemToFind) return true;
-
-        parent = parent.parentNode;
-    }
-
-    return false;
-}
 
 export default function useOutSideClick(elemRef, cb) {
     useEffect(() => {
-        const elemToFind = elemRef.current || elemRef;
-
         const handleClick = (e) => {
-            if (!closest(e.target, elemToFind)) cb(e);
+            if (elemRef.current && !elemRef.current.contains(e.target)) cb(e);
         };
 
         window.addEventListener('click', handleClick);

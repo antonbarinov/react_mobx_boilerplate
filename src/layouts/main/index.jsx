@@ -18,7 +18,7 @@ export default function MainLayout({ children }) {
     if (initialFetching) return null;
 
     return (
-        <span>
+        <>
             <OfflineOverlay />
             <div className={ styles.wrap }>
                 <Header />
@@ -27,7 +27,7 @@ export default function MainLayout({ children }) {
                 </div>
             </div>
             <Footer />
-        </span>
+        </>
     );
 }
 

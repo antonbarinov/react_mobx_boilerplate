@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { observer } from 'mobx-react';
 import Container from 'components/Container';
 import { currentRoute } from 'lib/router';
+import useOutSideClick from 'hooks/useOutSideClick';
+
 
 import { useLocalState } from './state';
 
@@ -24,9 +26,16 @@ const updateTimeEffect = (state) => () => {
 
 export default function MainPage() {
     const state = useLocalState();
+    const [ showTile, setShowTime ] = useState(true);
+
+    const testRef = useRef();
 
     // Update time
     useEffect(updateTimeEffect(state), []);
+
+    useOutSideClick(testRef, () => {
+        setShowTime(false);
+    });
 
 
     const { routeParams, currentLocation, searchParams } = currentRoute;
@@ -37,7 +46,7 @@ export default function MainPage() {
             <h1>{ state.title }</h1>
             <input value={ state.title } onChange={ state.handleTitleChange } />
             { page && <h3>Route param "page": { page }</h3> }
-            <div>This time is { state.time }</div>
+            { showTile && <div ref={ testRef }>This time is { state.time }</div> }
             <div>Hash: { currentLocation.location.hash }</div>
             <div>searchParams: { JSON.stringify(searchParams) }</div>
         </Container>
