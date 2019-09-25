@@ -10,12 +10,6 @@ class TabListContextState {
     @observable activeTabId = null;
     onTabClick = null;
 
-    setActive = tab => {
-        for (const t of this.tabs) {
-            t.active = tab === t;
-        }
-    };
-
     pushTab = tab => {
         this.tabs.add(tab);
     };
@@ -28,7 +22,7 @@ class TabListContextState {
 
 const TabsContext = React.createContext();
 
-export const TabList = observer(({ onTabClick = null, context = null, children }) => {
+const TabList = observer(({ onTabClick = null, context = null, children }) => {
     const contextData = context || useState(new TabListContextState())[0];
 
     useState(() => {
@@ -44,10 +38,10 @@ export const TabList = observer(({ onTabClick = null, context = null, children }
     );
 });
 
-export const Tab = observer(
+const Tab = observer(
     ({
          title = '',
-         defaultActive = false,
+         disabled = false,
          children = null,
          id = null,
          ...restProps
@@ -57,7 +51,7 @@ export const Tab = observer(
         const [ tab ] = useState({
             id,
             title,
-            active: defaultActive,
+            disabled,
             children,
             ...restProps,
         });
@@ -72,6 +66,7 @@ export const Tab = observer(
 
         useEffect(() => {
             tab.title = title;
+            tab.disabled = disabled;
             tab.children = children;
             tab.id = id;
 

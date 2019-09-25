@@ -150,6 +150,11 @@ module.exports = {
                         options: {
                             // Prefer `dart-sass`
                             implementation: require('sass'),
+                            sassOptions: {
+                                includePaths: [
+                                    path.resolve(__dirname, "./src"),
+                                ]
+                            },
                         },
                     },
                 ],
