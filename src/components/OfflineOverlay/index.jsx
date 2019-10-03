@@ -5,8 +5,8 @@ import { BaseComponent } from 'components/BaseComponent';
 import styles from './styles.module.scss';
 
 import State from './state';
-const localState = new State();
 
+const localState = new State();
 
 
 @observer

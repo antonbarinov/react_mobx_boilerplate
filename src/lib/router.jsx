@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, runInAction } from 'mobx';
 import pathToRegexp from 'path-to-regexp';
 import mutateObject from 'helpers/mutateObject';
 
@@ -34,7 +34,8 @@ export function redirect(to, replace = false, title = '') {
 
     if (replace) {
         history.replaceState({}, title, to);
-    } else {
+    }
+    else {
         history.pushState({}, title, to);
     }
 
@@ -71,19 +72,21 @@ class CurrentRoute {
     @action setCurrentRoute = () => {
         const windowLocation = window.location;
 
-        let path, fullPath;
+        let path,
+            fullPath;
 
         if (this.hashMode) {
             const hashPath = windowLocation.hash.substr(1);
             const parsedURL = new URL(hashPath, windowLocation.origin);
             path = parsedURL.pathname;
             fullPath = hashPath;
-        } else {
+        }
+        else {
             path = windowLocation.pathname;
             fullPath = path + windowLocation.search;
         }
 
-        const parsedURL = new URL(fullPath,  windowLocation.origin);
+        const parsedURL = new URL(fullPath, windowLocation.origin);
         const searchParams = Object.fromEntries(parsedURL.searchParams.entries());
         mutateObject(this.searchParams, searchParams);
 
@@ -94,7 +97,7 @@ class CurrentRoute {
         };
 
         mutateObject(this.currentLocation, route);
-    }
+    };
 }
 
 
@@ -109,11 +112,11 @@ let globalRoutersCount = 0;
  * hashMode - hash router instead of regular url's
  */
 export function Router({ routes, global, hashMode }) {
-    const [ state ] = useState(new class {
+    const [ state ] = useState(() => new class {
         @observable.ref currentComponent = null;
     });
 
-    const navigate = useCallback(() => {
+    const navigate = useCallback(action(() => {
         let result = routes[''] || routes['*'] || null;
 
         let isRouteFound = false;
@@ -149,7 +152,7 @@ export function Router({ routes, global, hashMode }) {
         }
 
         state.currentComponent = result;
-    }, []);
+    }), []);
 
     useEffect(() => {
         if (global) globalRoutersCount++;
@@ -161,7 +164,7 @@ export function Router({ routes, global, hashMode }) {
             },
             () => {
                 navigate();
-            }
+            },
         );
 
         return () => {
@@ -171,9 +174,11 @@ export function Router({ routes, global, hashMode }) {
     }, []);
 
     useState(() => {
-        currentRoute.hashMode = !!hashMode;
-        if (hashMode && window.location.hash === '') window.location.hash = '/';
-        currentRoute.setCurrentRoute();
+        runInAction(() => {
+            currentRoute.hashMode = !!hashMode;
+            if (hashMode && window.location.hash === '') window.location.hash = '/';
+            currentRoute.setCurrentRoute();
+        });
     }, [ hashMode ]);
 
     useState(() => navigate());
@@ -193,7 +198,7 @@ Router = observer(Router);
  * grabActive - callback function that tells is link active or not
  */
 export function Link({ to, exact, dontIgnoreHash, grabActive, activeClass, children, className, ...restProps }) {
-    const [ state ] = useState(new class {
+    const [ state ] = useState(() => new class {
         @observable active = false;
     });
 
@@ -210,7 +215,7 @@ export function Link({ to, exact, dontIgnoreHash, grabActive, activeClass, child
         },
         () => {
             calcActive();
-        }
+        },
     ), []);
 
     const handleClick = useCallback((e) => {
@@ -219,7 +224,7 @@ export function Link({ to, exact, dontIgnoreHash, grabActive, activeClass, child
         redirect(to);
     }, []);
 
-    const calcActive = useCallback(() => {
+    const calcActive = useCallback(action(() => {
         const { currentRegExp, currentLocation } = currentRoute;
 
         let active = false;
@@ -239,7 +244,7 @@ export function Link({ to, exact, dontIgnoreHash, grabActive, activeClass, child
             state.active = active;
             grabActive && grabActive(active);
         }
-    }, []);
+    }), []);
 
     useState(() => calcActive());
 

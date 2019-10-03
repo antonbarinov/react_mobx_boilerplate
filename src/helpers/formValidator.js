@@ -1,3 +1,5 @@
+import { action, runInAction } from 'mobx';
+
 export default class FormValidator {
     isFormValid = true;
     formFields = {};
@@ -14,13 +16,15 @@ export default class FormValidator {
         };
     }
 
+    @action
     applyServerValidationErrors(e) {
         let response;
 
         try {
             response = e.response.data;
             if (response.errorType === undefined) return false;
-        } catch (e) {
+        }
+        catch (e) {
             return false;
         }
 
@@ -45,15 +49,20 @@ export default class FormValidator {
         return result;
     }
 
-    async validateField(fieldObject = {}, validationFunction) {
+    @action
+    async validateField(fieldObject, validationFunction) {
         const { value } = fieldObject;
         const result = await validationFunction(value);
-        if (result !== undefined) {
-            fieldObject.errorMessage = result;
-            this.isFormValid = false;
-        } else {
-            fieldObject.errorMessage = '';
-        }
+
+        runInAction(() => {
+            if (result !== undefined) {
+                fieldObject.errorMessage = result;
+                this.isFormValid = false;
+            }
+            else {
+                fieldObject.errorMessage = '';
+            }
+        });
     }
 
     isFieldsValid() {

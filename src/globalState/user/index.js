@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 import ApiRequest, { getUserAccessToken } from 'lib/apiRequest';
 
 
@@ -19,27 +19,33 @@ class User {
             if (accessToken) {
                 this.isFetching = true;
                 const response = await new ApiRequest('GET /me').send();
-                this.user = response.getData();
-                this.authorized = true;
+                runInAction(() => {
+                    this.user = response.getData();
+                    this.authorized = true;
+                });
             }
         }
         catch (e) {
-            this.user = false;
-            this.authorized = false;
+            runInAction(() => {
+                this.user = false;
+                this.authorized = false;
+            });
 
             throw e;
         }
         finally {
-            this.initialFetching = false;
-            this.isFetching = false;
+            runInAction(() => {
+                this.initialFetching = false;
+                this.isFetching = false;
+            });
         }
-    }
+    };
 
     @action logout = () => {
         window.localStorage.removeItem('accessToken');
         this.user = false;
         this.authorized = false;
-    }
+    };
 
     @action login = async (data) => {
         const response = await new ApiRequest('POST /login', false).sendJSON(data);
@@ -56,7 +62,7 @@ class User {
         }
 
         return respData;
-    }
+    };
 
     @action signup = async (data) => {
         const response = await new ApiRequest('POST /signup', false).sendJSON(data);
@@ -72,8 +78,9 @@ class User {
         }
 
         return respData;
-    }
+    };
 }
+
 
 const userState = new User();
 

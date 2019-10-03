@@ -1,5 +1,6 @@
-import { observable, action } from 'mobx';
+import { action, observable } from 'mobx';
 import { useState } from 'react';
+
 
 class MainPageState {
     @observable time = new Date().toISOString();
@@ -8,14 +9,15 @@ class MainPageState {
     @action
     handleTitleChange = (e) => {
         this.title = e.target.value;
-    }
+    };
 }
+
 
 /**
  * @returns {MainPageState}
  */
 export const useLocalState = () => {
-    const [ state ] = useState(new MainPageState());
+    const [ state ] = useState(() => new MainPageState());
 
     return state;
 };

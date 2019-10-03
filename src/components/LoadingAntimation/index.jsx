@@ -8,11 +8,11 @@ import styles from './styles.module.scss';
 export default class LoadingAnimation extends BaseComponent {
     render() {
         return (
-            <div className={styles.lds_ellipsis}>
-                <div/>
-                <div/>
-                <div/>
-                <div/>
+            <div className={ styles.lds_ellipsis }>
+                <div />
+                <div />
+                <div />
+                <div />
             </div>
         );
     }

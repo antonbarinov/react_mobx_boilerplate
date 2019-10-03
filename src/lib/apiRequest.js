@@ -17,6 +17,7 @@ else if (NODE_ENV === 'staging') {
 window.API_BASE_URL = apiUrl;
 
 export const API_BASE_URL = apiUrl;
+
 /**
  * API BASE URL -- END
  */
@@ -86,7 +87,7 @@ export default class ApiRequest {
         if (this.__data !== null) options.data = this.__data;
 
         const userAccessToken = getUserAccessToken();
-        if (userAccessToken) options.headers['Authorization'] = userAccessToken;
+        if (userAccessToken) options.headers.Authorization = userAccessToken;
 
         options.url = this.__url;
 

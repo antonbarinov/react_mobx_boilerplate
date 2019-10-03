@@ -11,6 +11,6 @@ export default function useOutSideClick(elemRef, cb) {
 
         return () => {
             window.removeEventListener('click', handleClick);
-        }
+        };
     }, []);
 }

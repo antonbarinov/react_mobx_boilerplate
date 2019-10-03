@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { observable } from 'mobx';
 
@@ -10,11 +10,11 @@ class TabListContextState {
     @observable activeTabId = null;
     onTabClick = null;
 
-    pushTab = tab => {
+    pushTab = (tab) => {
         this.tabs.add(tab);
     };
 
-    removeTab = tab => {
+    removeTab = (tab) => {
         this.tabs.delete(tab);
     };
 }
@@ -23,7 +23,7 @@ class TabListContextState {
 const TabsContext = React.createContext();
 
 const TabList = observer(({ onTabClick = null, context = null, children }) => {
-    const contextData = context || useState(new TabListContextState())[0];
+    const contextData = context || useState(() => new TabListContextState())[0];
 
     useState(() => {
         if (typeof onTabClick === 'function') contextData.onTabClick = onTabClick;

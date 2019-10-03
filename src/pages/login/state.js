@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { action, observable, runInAction } from 'mobx';
 import { useState } from 'react';
 import FormValidator from 'helpers/formValidator';
 import userState from 'globalState/user';
@@ -15,6 +15,7 @@ class LoginPageState {
     @observable submitInProgress = false;
 
     // Validate form and submit
+    @action
     validateAndSubmit = async () => {
         withOnlyOneInTime(this, 'validateAndSubmit', async () => {
             const fv = new FormValidator(this.formFields);
@@ -42,8 +43,11 @@ class LoginPageState {
 
             if (!isValid) return false;
 
-            try {
+            runInAction(() => {
                 this.submitInProgress = true;
+            });
+
+            try {
                 const data = fv.getFieldsData();
                 let result = await userState.login(data);
                 if (result) {
@@ -52,10 +56,15 @@ class LoginPageState {
                 }
             }
             catch (e) {
-                const errorsParsed = fv.applyServerValidationErrors(e);
-                if (!errorsParsed) this.serverError = fv.serverErrorMessage || e.message;
-            } finally {
-                this.submitInProgress = false;
+                runInAction(() => {
+                    const errorsParsed = fv.applyServerValidationErrors(e);
+                    if (!errorsParsed) this.serverError = fv.serverErrorMessage || e.message;
+                });
+            }
+            finally {
+                runInAction(() => {
+                    this.submitInProgress = false;
+                });
             }
         });
     };
@@ -66,11 +75,12 @@ class LoginPageState {
     };
 }
 
+
 /**
  * @returns {LoginPageState}
  */
 export const useLocalState = () => {
-    const [ state ] = useState(new LoginPageState());
+    const [ state ] = useState(() => new LoginPageState());
 
     return state;
 };

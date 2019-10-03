@@ -13,9 +13,10 @@ export class BaseComponent extends React.Component {
         if (typeof callback === 'function') {
             this.__effects.push({
                 callback,
-                reactOnComponentDidUpdate
+                reactOnComponentDidUpdate,
             });
-        } else {
+        }
+        else {
             throw new Error('Only functions can be passed into useEffect()');
         }
     };
@@ -24,7 +25,7 @@ export class BaseComponent extends React.Component {
         for (const callback of this.__cleanupEffects) {
             callback();
         }
-    };
+    }
 
     componentDidUpdate() {
         for (const { callback, reactOnComponentDidUpdate } of this.__effects) {
@@ -37,5 +38,5 @@ export class BaseComponent extends React.Component {
             const result = callback(true, false);
             if (typeof result === 'function') this.__cleanupEffects.push(result);
         }
-    };
+    }
 }

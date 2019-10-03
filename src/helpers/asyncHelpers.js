@@ -12,12 +12,12 @@ function debounceFunc(context, key) {
     return (delayInMs = 300) => {
         const currentValue = ++contextData.value;
 
-        return new Promise(resolve => {
+        return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(currentValue === contextData.value);
             }, delayInMs);
         });
-    }
+    };
 }
 
 function stillActualChecker(context, key) {
@@ -53,9 +53,11 @@ export function withOnlyOneInTime(context, key, func) {
 
         try {
             await func();
-        } catch (e) {
+        }
+        catch (e) {
             throw e;
-        } finally {
+        }
+        finally {
             contextData.value = 0;
         }
     })();
@@ -83,20 +85,29 @@ export function withAsyncHelpers(context, key, func) {
                 stillActualCheckpoint,
                 debounce,
             });
-        } catch (e) {
+        }
+        catch (e) {
             if (!e.nonActual) throw e;
         }
     })();
 }
 
 
-const sleep = (ms) => new Promise(resolve => {
-    setTimeout(() => { resolve() }, ms);
+const sleep = (ms) => new Promise((resolve) => {
+    setTimeout(() => {
+        resolve();
+    }, ms);
 });
+
 
 export class WithRetries {
     maxRetries = 5;
-    retriesPlan = [100, 200, 300, 1000];
+    retriesPlan = [
+        100,
+        200,
+        300,
+        1000,
+    ];
     stillActualFunction = null;
 
     setMaxRetries = (maxRetries) => {
@@ -134,7 +145,8 @@ export class WithRetries {
                 const result = await func();
                 resolve(result);
                 return;
-            } catch(e) {
+            }
+            catch (e) {
                 console.error(e);
                 console.log('Trying to retry');
 
@@ -152,7 +164,8 @@ export class WithRetries {
                         const result = await func();
                         resolve(result);
                         break;
-                    } catch (e) {
+                    }
+                    catch (e) {
                         console.error(e);
                     }
                 }
@@ -160,5 +173,5 @@ export class WithRetries {
 
             reject(maxRetriesReachedKey);
         });
-    }
+    };
 }

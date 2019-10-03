@@ -5,7 +5,8 @@ export function smartRedirect(to) {
     if (redirectTo) {
         window.localStorage.removeItem('redirect');
         redirect(redirectTo);
-    } else {
+    }
+    else {
         redirect(to);
     }
 }

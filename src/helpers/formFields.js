@@ -1,8 +1,12 @@
 // Need to bind component "this"
+import { runInAction } from 'mobx';
+
 export function formFieldsUniversalHandleChange(e) {
     const { field } = this.props;
     if (field) {
-        field.value = e.target.value;
+        runInAction(() => {
+            field.value = e.target.value;
+        });
     }
 }
 

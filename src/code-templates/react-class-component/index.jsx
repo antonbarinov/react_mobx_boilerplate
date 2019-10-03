@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { BaseComponent } from 'components/BaseComponent';
-import PropTypes from 'prop-types';
 
 import styles from './styles.module.scss';
 
@@ -29,6 +28,4 @@ export default class ReactClassComponent extends BaseComponent {
     }
 }
 
-ReactClassComponent.propTypes = {
-
-};
+ReactClassComponent.propTypes = {};

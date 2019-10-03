@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, runInAction } from 'mobx';
 import { useState } from 'react';
 import FormValidator from 'helpers/formValidator';
 import userState from 'globalState/user';
@@ -50,21 +50,28 @@ class SignUpPageState {
 
             if (!isValid) return false;
 
-            try {
+            runInAction(() => {
                 this.submitInProgress = true;
+            });
+
+            try {
                 const data = fv.getFieldsData();
-                let result = await userState.signup(data, this.signupRequestState);
+                let result = await userState.signup(data);
                 if (result) {
                     // Success
                     smartRedirect('/profile');
                 }
             }
             catch (e) {
-                const errorsParsed = fv.applyServerValidationErrors(e);
-                if (!errorsParsed) this.serverError = fv.serverErrorMessage || e.message;
+                runInAction(() => {
+                    const errorsParsed = fv.applyServerValidationErrors(e);
+                    if (!errorsParsed) this.serverError = fv.serverErrorMessage || e.message;
+                });
             }
             finally {
-                this.submitInProgress = true;
+                runInAction(() => {
+                    this.submitInProgress = true;
+                });
             }
         });
     };
@@ -75,11 +82,12 @@ class SignUpPageState {
     };
 }
 
+
 /**
  * @returns {SignUpPageState}
  */
 export const useLocalState = () => {
-    const [ state ] = useState(new SignUpPageState());
+    const [ state ] = useState(() => new SignUpPageState());
 
     return state;
 };

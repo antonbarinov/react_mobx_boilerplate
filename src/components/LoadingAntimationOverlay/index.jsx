@@ -16,14 +16,14 @@ export default class LoadingAnimationOverlay extends BaseComponent {
     }
 
     blurEffect = () => {
-        let container =  this.props.bluredContainerRef;
+        let container = this.props.bluredContainerRef;
         if (container.current) container = container.current;
 
         container.style.filter = 'blur(2px)';
 
         return () => {
             container.style.filter = '';
-        }
+        };
     };
 
     render() {

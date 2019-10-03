@@ -23,7 +23,7 @@ export default function MainLayout({ children }) {
             <div className={ styles.wrap }>
                 <Header />
                 <div className={ styles.main }>
-                     { children }
+                    { children }
                 </div>
             </div>
             <Footer />

@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 function getSize() {
     return {
         width: window.innerWidth,
-        height:  window.innerHeight,
+        height: window.innerHeight,
     };
 }
 
 export default function useWindowSize() {
-    const [windowSize, setWindowSize] = useState(getSize);
+    const [ windowSize, setWindowSize ] = useState(getSize);
 
     useEffect(() => {
         function handleResize() {

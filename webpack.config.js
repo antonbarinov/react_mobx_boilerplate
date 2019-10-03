@@ -166,10 +166,11 @@ module.exports = {
             },
             {
                 test: /\.svg$/,
+                exclude: /\.file\.svg$/,
                 use: [ 'raw-loader' ],
             },
             {
-                test: /\.(png|jpg|jpeg|gif|webp)$/,
+                test: /\.(png|jpg|jpeg|gif|webp|file\.svg)$/,
                 use: [
                     {
                         loader: 'file-loader',

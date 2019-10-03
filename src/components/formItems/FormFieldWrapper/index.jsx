@@ -30,7 +30,7 @@ export default class FormFieldWrapper extends BaseComponent {
 
         return (
             <div className={ classesStr.join(' ') }>
-                { label && <div className={ styles.label } >{ label }</div> }
+                { label && <div className={ styles.label }>{ label }</div> }
                 { children }
                 <div className={ styles.msg }>{ msg || (field && field.errorMessage) }</div>
             </div>

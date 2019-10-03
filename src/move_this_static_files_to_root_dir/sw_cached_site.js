@@ -7,12 +7,12 @@ function defaultResponse() {
 }
 
 // Call Install Event
-self.addEventListener('install', async e => {
+self.addEventListener('install', async (e) => {
     console.log('Service Worker: Installed');
 });
 
 // Call Activate Event
-self.addEventListener('activate', e => {
+self.addEventListener('activate', (e) => {
     console.log('Service Worker: Activated');
 });
 
@@ -29,7 +29,8 @@ const respHandler = async (e) => {
 
         // Update main page cache
         if (e.request.mode === 'navigate') cache.put('/', res.clone()).catch(console.error);
-    } catch (err) {
+    }
+    catch (err) {
         res = await caches.match(e.request);
 
         // Return index page
@@ -42,10 +43,10 @@ const respHandler = async (e) => {
 };
 
 // Call Fetch Event
-self.addEventListener('fetch', async e => {
+self.addEventListener('fetch', async (e) => {
     if (e.request.method !== 'GET') return;
 
     e.respondWith(
-        respHandler(e)
+        respHandler(e),
     );
 });

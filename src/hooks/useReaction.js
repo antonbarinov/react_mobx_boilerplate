@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { reaction } from 'mobx';
 
 export default function useReaction(reactionFunc, reactToFunc, debounce = 0, fireImmediately = false) {
@@ -6,7 +6,7 @@ export default function useReaction(reactionFunc, reactToFunc, debounce = 0, fir
         let index = 1;
         let timeout;
         let options = {
-            fireImmediately
+            fireImmediately,
         };
 
         const disposer = reaction(
@@ -18,7 +18,8 @@ export default function useReaction(reactionFunc, reactToFunc, debounce = 0, fir
                     timeout = setTimeout(() => {
                         if (storedIndex === index) reactionFunc(data, reaction);
                     }, debounce);
-                } else {
+                }
+                else {
                     reactionFunc(data, reaction);
                 }
             }, options);
@@ -26,6 +27,6 @@ export default function useReaction(reactionFunc, reactToFunc, debounce = 0, fir
         return () => {
             clearTimeout(timeout);
             disposer();
-        }
+        };
     }, []);
-};
+}

@@ -43,5 +43,5 @@ function CustomLink({ children, to, className, ...rest }) {
     const stylesStr = [ styles.link ];
     if (className) stylesStr.push(className);
 
-    return <Link to={ to } { ...rest } activeClass={ styles.active } className={ stylesStr.join(' ') }>{ children }</Link>
+    return <Link to={ to } { ...rest } activeClass={ styles.active } className={ stylesStr.join(' ') }>{ children }</Link>;
 }

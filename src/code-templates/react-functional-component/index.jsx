@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 
 import styles from './styles.module.scss';
@@ -13,6 +13,6 @@ export default function ReactFunctionalComponent(props) {
             <h1>Hello world</h1>
         </div>
     );
-};
+}
 
 ReactFunctionalComponent = observer(ReactFunctionalComponent);

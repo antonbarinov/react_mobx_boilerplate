@@ -1,17 +1,17 @@
-import { observable, reaction } from 'mobx';
+import { action, observable, reaction } from 'mobx';
 import onlineState from 'globalState/online';
 
 export default class {
     @observable showOverlay = onlineState.online === false;
 
     reactionOnOnlineChangeEffect = () => {
-        const checkOverlay = () => {
+        const checkOverlay = action(() => {
             this.showOverlay = onlineState.online === false;
-        };
+        });
 
         const disposer = reaction(
             () => [ onlineState.online ],
-            checkOverlay
+            checkOverlay,
         );
 
         checkOverlay();
@@ -21,5 +21,5 @@ export default class {
 
     handleClick = () => {
         this.showOverlay = false;
-    }
+    };
 }

@@ -30,12 +30,13 @@ const mutateObject = (oldState, newState, preserveRootProps) => {
         }
         if (isSrcArray) {
             newState.forEach((value, i) => {
-                if (oldState.length < i) {
-                    oldState.push();
+                if (oldState.length < i + 1) {
+                    oldState.push([]);
                 }
                 oldState[i] = mutateObject(oldState[i], value, false);
             });
-        } else {
+        }
+        else {
             for (const i in newState) {
                 if (newState.hasOwnProperty(i)) {
                     oldState[i] = mutateObject(oldState[i], newState[i], false);

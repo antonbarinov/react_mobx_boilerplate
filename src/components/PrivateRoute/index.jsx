@@ -28,7 +28,7 @@ export default class PrivateRoute extends BaseComponent {
                     user,
                 ];
             },
-            this.reactionHandler)
+            this.reactionHandler);
     };
 
     reactionHandler = () => {

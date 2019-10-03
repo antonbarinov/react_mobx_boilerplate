@@ -15,7 +15,7 @@ export default class FormButton extends BaseComponent {
         if (loading) {
             return (
                 <>
-                    <span className={styles.animation}><LoadingAnimation /> </span>
+                    <span className={ styles.animation }><LoadingAnimation /> </span>
                     <span>{ loading + '' }</span>
                 </>
             );
