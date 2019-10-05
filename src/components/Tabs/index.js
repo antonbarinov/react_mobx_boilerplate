@@ -40,12 +40,12 @@ const TabList = observer(({ onTabClick = null, context = null, children }) => {
 
 const Tab = observer(
     ({
-         title = '',
-         disabled = false,
-         children = null,
-         id = null,
-         ...restProps
-     }) => {
+        title = '',
+        disabled = false,
+        children = null,
+        id = null,
+        ...restProps
+    }) => {
         const contextData = useContext(TabsContext);
 
         const [ tab ] = useState({

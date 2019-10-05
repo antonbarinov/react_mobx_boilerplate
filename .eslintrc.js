@@ -77,5 +77,6 @@ module.exports = {
     "no-this-before-super": "error", // Disallow use of this/super before calling super() in constructors. - https://eslint.org/docs/rules/no-this-before-super
     "rest-spread-spacing": ["error", "never"], // Enforce spacing between rest and spread operators and their expressions - https://eslint.org/docs/rules/rest-spread-spacing
     "template-curly-spacing": ["error", "never"], // Enforce Usage of Spacing in Template Strings - https://eslint.org/docs/rules/template-curly-spacing
+    "indent": ["error", 4], // enforce consistent indentation - https://eslint.org/docs/rules/indent
   }
 };
