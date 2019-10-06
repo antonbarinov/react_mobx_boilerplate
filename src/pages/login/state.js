@@ -5,7 +5,6 @@ import userState from 'globalState/user';
 import { smartRedirect } from 'helpers/redirect';
 import { withOnlyOneInTime } from 'helpers/asyncHelpers';
 
-
 class LoginPageState {
     @observable formFields = {
         login: FormValidator.createFormFieldObj(),
@@ -54,14 +53,12 @@ class LoginPageState {
                     // Success
                     smartRedirect('/profile');
                 }
-            }
-            catch (e) {
+            } catch (e) {
                 runInAction(() => {
                     const errorsParsed = fv.applyServerValidationErrors(e);
                     if (!errorsParsed) this.serverError = fv.serverErrorMessage || e.message;
                 });
-            }
-            finally {
+            } finally {
                 runInAction(() => {
                     this.submitInProgress = false;
                 });
@@ -75,12 +72,11 @@ class LoginPageState {
     };
 }
 
-
 /**
  * @returns {LoginPageState}
  */
 export const useLocalState = () => {
-    const [ state ] = useState(() => new LoginPageState());
+    const [state] = useState(() => new LoginPageState());
 
     return state;
 };

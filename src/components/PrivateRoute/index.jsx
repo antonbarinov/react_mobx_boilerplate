@@ -5,7 +5,6 @@ import userState from 'globalState/user';
 import { redirect } from 'lib/router';
 import { BaseComponent } from 'components/BaseComponent';
 
-
 @observer
 export default class PrivateRoute extends BaseComponent {
     constructor(props) {
@@ -17,18 +16,12 @@ export default class PrivateRoute extends BaseComponent {
     }
 
     privateCheckEffect = () => {
-        return reaction(
-            () => {
-                const { children } = this.props;
-                const { initialFetching, user } = userState;
+        return reaction(() => {
+            const { children } = this.props;
+            const { initialFetching, user } = userState;
 
-                return [
-                    children,
-                    initialFetching,
-                    user,
-                ];
-            },
-            this.reactionHandler);
+            return [children, initialFetching, user];
+        }, this.reactionHandler);
     };
 
     reactionHandler = () => {
@@ -37,7 +30,10 @@ export default class PrivateRoute extends BaseComponent {
         const doRedirect = (initialFetching === true || user) === false;
 
         if (doRedirect) {
-            window.localStorage.setItem('redirect', window.location.pathname + window.location.search + window.location.hash);
+            window.localStorage.setItem(
+                'redirect',
+                window.location.pathname + window.location.search + window.location.hash,
+            );
             redirect('/login');
         }
     };

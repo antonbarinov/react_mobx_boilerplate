@@ -6,7 +6,6 @@ import { BaseComponent } from 'components/BaseComponent';
 
 import styles from './styles.module.scss';
 
-
 @observer
 export default class FormButton extends BaseComponent {
     getContent = () => {
@@ -15,12 +14,13 @@ export default class FormButton extends BaseComponent {
         if (loading) {
             return (
                 <>
-                    <span className={ styles.animation }><LoadingAnimation /> </span>
-                    <span>{ loading + '' }</span>
+                    <span className={styles.animation}>
+                        <LoadingAnimation />{' '}
+                    </span>
+                    <span>{loading + ''}</span>
                 </>
             );
-        }
-        else {
+        } else {
             return this.props.children;
         }
     };
@@ -28,13 +28,13 @@ export default class FormButton extends BaseComponent {
     render() {
         const { innerRef, loading, ...props } = this.props;
 
-        const classes = [ styles.button ];
+        const classes = [styles.button];
         if (props.className) classes.push(props.className);
         if (loading) classes.push(styles.loading);
 
         return (
-            <div { ...props } className={ classes.join(' ') } ref={ innerRef }>
-                { this.getContent() }
+            <div {...props} className={classes.join(' ')} ref={innerRef}>
+                {this.getContent()}
             </div>
         );
     }

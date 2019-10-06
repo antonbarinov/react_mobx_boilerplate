@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 
 import styles from './styles.module.scss';
 
-
 @observer
 export default class FormServerErrors extends BaseComponent {
     render() {
@@ -13,8 +12,8 @@ export default class FormServerErrors extends BaseComponent {
         if (!msg) return null;
 
         return (
-            <div className={ styles.serverErrorsContainer }>
-                <div className={ styles.msg }>{ msg }</div>
+            <div className={styles.serverErrorsContainer}>
+                <div className={styles.msg}>{msg}</div>
             </div>
         );
     }

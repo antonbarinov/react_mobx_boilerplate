@@ -24,7 +24,9 @@ const cleanObj = (oldObj, newObj) => {
 const mutateObject = (oldState, newState, preserveRootProps) => {
     if (isEnumerable(newState)) {
         const isSrcArray = isArray(newState);
-        oldState = (isEnumerable(oldState) && isArray(oldState) === isSrcArray && oldState) || (isSrcArray ? [] : {});
+        oldState =
+            (isEnumerable(oldState) && isArray(oldState) === isSrcArray && oldState) ||
+            (isSrcArray ? [] : {});
         if (!preserveRootProps) {
             isSrcArray ? cleanArray(oldState, newState) : cleanObj(oldState, newState);
         }
@@ -35,8 +37,7 @@ const mutateObject = (oldState, newState, preserveRootProps) => {
                 }
                 oldState[i] = mutateObject(oldState[i], value, false);
             });
-        }
-        else {
+        } else {
             for (const i in newState) {
                 if (newState.hasOwnProperty(i)) {
                     oldState[i] = mutateObject(oldState[i], newState[i], false);

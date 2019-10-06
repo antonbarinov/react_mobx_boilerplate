@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export class BaseComponent extends React.Component {
     __effects = [];
     __cleanupEffects = [];
@@ -15,8 +14,7 @@ export class BaseComponent extends React.Component {
                 callback,
                 reactOnComponentDidUpdate,
             });
-        }
-        else {
+        } else {
             throw new Error('Only functions can be passed into useEffect()');
         }
     };

@@ -1,7 +1,6 @@
 import { action, observable, runInAction } from 'mobx';
 import ApiRequest, { getUserAccessToken } from 'lib/apiRequest';
 
-
 class User {
     @observable initialFetching = true;
     @observable isFetching = true;
@@ -24,16 +23,14 @@ class User {
                     this.authorized = true;
                 });
             }
-        }
-        catch (e) {
+        } catch (e) {
             runInAction(() => {
                 this.user = false;
                 this.authorized = false;
             });
 
             throw e;
-        }
-        finally {
+        } finally {
             runInAction(() => {
                 this.initialFetching = false;
                 this.isFetching = false;
@@ -80,7 +77,6 @@ class User {
         return respData;
     };
 }
-
 
 const userState = new User();
 

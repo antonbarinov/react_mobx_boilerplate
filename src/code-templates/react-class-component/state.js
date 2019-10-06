@@ -1,3 +1,1 @@
-export default class ReactClassComponentState {
-
-}
+export default class ReactClassComponentState {}

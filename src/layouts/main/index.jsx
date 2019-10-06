@@ -10,7 +10,6 @@ import userState from 'globalState/user';
 
 import styles from './styles.module.scss';
 
-
 export default function MainLayout({ children }) {
     useLayoutGlobalLoader();
 
@@ -20,11 +19,9 @@ export default function MainLayout({ children }) {
     return (
         <>
             <OfflineOverlay />
-            <div className={ styles.wrap }>
+            <div className={styles.wrap}>
                 <Header />
-                <div className={ styles.main }>
-                    { children }
-                </div>
+                <div className={styles.main}>{children}</div>
             </div>
             <Footer />
         </>

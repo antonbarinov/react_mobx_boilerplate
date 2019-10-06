@@ -12,11 +12,7 @@ mobxConfigure({
     enforceActions: 'always', // Changing data only inside actions wrapped by @action
 });
 
-
-ReactDOM.render(
-    <App />,
-    document.getElementById('root'),
-);
+ReactDOM.render(<App />, document.getElementById('root'));
 
 /*
  // Register service workers

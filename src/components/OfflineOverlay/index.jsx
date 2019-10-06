@@ -8,7 +8,6 @@ import State from './state';
 
 const localState = new State();
 
-
 @observer
 export default class OfflineOverlay extends BaseComponent {
     constructor(props) {
@@ -22,11 +21,11 @@ export default class OfflineOverlay extends BaseComponent {
 
     render() {
         const state = this.state;
-        const classes = [ styles.OfflineOverlay ];
+        const classes = [styles.OfflineOverlay];
         if (state.showOverlay) classes.push(styles.visible);
 
         return (
-            <div className={ classes.join(' ') } onClick={ state.handleClick }>
+            <div className={classes.join(' ')} onClick={state.handleClick}>
                 Offline (click to close this alert)
             </div>
         );

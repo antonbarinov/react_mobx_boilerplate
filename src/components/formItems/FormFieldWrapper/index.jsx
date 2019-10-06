@@ -5,7 +5,6 @@ import { BaseComponent } from 'components/BaseComponent';
 
 import styles from './styles.module.scss';
 
-
 @observer
 export default class FormFieldWrapper extends BaseComponent {
     static filterProps = (props) => {
@@ -24,15 +23,15 @@ export default class FormFieldWrapper extends BaseComponent {
 
     render() {
         const { children, msg, label, field, className } = this.props;
-        let classesStr = [ styles.container ];
+        let classesStr = [styles.container];
         if (className) classesStr.push(className);
         if (msg || (field && field.errorMessage)) classesStr.push(styles.error);
 
         return (
-            <div className={ classesStr.join(' ') }>
-                { label && <div className={ styles.label }>{ label }</div> }
-                { children }
-                <div className={ styles.msg }>{ msg || (field && field.errorMessage) }</div>
+            <div className={classesStr.join(' ')}>
+                {label && <div className={styles.label}>{label}</div>}
+                {children}
+                <div className={styles.msg}>{msg || (field && field.errorMessage)}</div>
             </div>
         );
     }

@@ -13,8 +13,7 @@ export function validateEmail(email) {
 
 export function arrayChunk(array = [], chunkSize = 2) {
     let result = [];
-    let i,
-        j;
+    let i, j;
     for (i = 0, j = array.length; i < j; i += chunkSize) {
         result.push(array.slice(i, i + chunkSize));
     }
@@ -40,7 +39,7 @@ export function clone(object) {
 }
 
 function isPrimitive(obj) {
-    return (obj !== Object(obj));
+    return obj !== Object(obj);
 }
 
 export function deepEqual(obj1, obj2) {

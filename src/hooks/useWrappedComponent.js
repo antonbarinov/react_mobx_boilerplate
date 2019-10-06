@@ -7,6 +7,6 @@ import { observer } from 'mobx-react';
  * @returns {*} Component
  */
 export default function useWrappedComponent(Component) {
-    const [ c ] = useState(() => observer(Component));
+    const [c] = useState(() => observer(Component));
     return c;
 }

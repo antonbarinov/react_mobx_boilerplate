@@ -5,17 +5,17 @@
     color: #ffffff;
     background: #5b5492;
     cursor: pointer;
-    transition: opacity .3s ease;
+    transition: opacity 0.3s ease;
     user-select: none;
 
     &.loading {
         pointer-events: none;
         cursor: default;
-        opacity: .6;
+        opacity: 0.6;
     }
 
     &:hover {
-        opacity: .8;
+        opacity: 0.8;
     }
 
     &:active {

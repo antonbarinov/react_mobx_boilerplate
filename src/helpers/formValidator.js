@@ -23,8 +23,7 @@ export default class FormValidator {
         try {
             response = e.response.data;
             if (response.errorType === undefined) return false;
-        }
-        catch (e) {
+        } catch (e) {
             return false;
         }
 
@@ -58,8 +57,7 @@ export default class FormValidator {
             if (result !== undefined) {
                 fieldObject.errorMessage = result;
                 this.isFormValid = false;
-            }
-            else {
+            } else {
                 fieldObject.errorMessage = '';
             }
         });

@@ -9,8 +9,7 @@ let apiUrl = 'http://localhost:3010';
 // Environment api path
 if (NODE_ENV === 'production') {
     apiUrl = 'http://localhost:3010';
-}
-else if (NODE_ENV === 'staging') {
+} else if (NODE_ENV === 'staging') {
     apiUrl = 'http://localhost:3010';
 }
 
@@ -28,7 +27,6 @@ function getDataHandler(resp) {
     };
 }
 
-
 export default class ApiRequest {
     __unifyErrorsHandler = true;
     __method = 'GET';
@@ -42,7 +40,10 @@ export default class ApiRequest {
     constructor(url = 'GET /', unifyErrorsHandler = true) {
         this.__unifyErrorsHandler = unifyErrorsHandler;
         const spaceIndex = url.indexOf(' ');
-        this.__method = url.substr(0, spaceIndex).trim().toUpperCase();
+        this.__method = url
+            .substr(0, spaceIndex)
+            .trim()
+            .toUpperCase();
         this.__url = url.substr(spaceIndex + 1).trim();
 
         if (!this.isAbsolute()) this.__url = (window.API_BASE_URL || API_BASE_URL) + this.__url;
@@ -93,7 +94,9 @@ export default class ApiRequest {
 
         // Upload progress
         options.onUploadProgress = (progressEvent) => {
-            let uploadPercentage = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total) + '');
+            let uploadPercentage = parseInt(
+                Math.round((progressEvent.loaded * 100) / progressEvent.total) + '',
+            );
             if (typeof this.__onUploadProgress === 'function') {
                 this.__onUploadProgress(uploadPercentage);
             }
@@ -104,18 +107,14 @@ export default class ApiRequest {
 
         try {
             response = await axios(options);
-        }
-        catch (e) {
+        } catch (e) {
             error = e;
             response = e.response;
-        }
-        finally {
-
+        } finally {
         }
 
         // Network connection error and there is no response object
         if (response === undefined) throw error;
-
 
         /**
          * Not authorized
@@ -133,11 +132,10 @@ export default class ApiRequest {
             resp.getData = getDataHandler(resp);
 
             return resp;
-        }
-        /**
-         * Errors
-         */
-        else {
+        } else {
+            /**
+             * Errors
+             */
             error.message = (response.data && response.data.message) || error.message;
 
             if (!this.__unifyErrorsHandler) throw error;
@@ -165,7 +163,6 @@ export default class ApiRequest {
         return this.__send();
     }
 }
-
 
 export function getUserAccessToken() {
     return window.localStorage.getItem('accessToken');

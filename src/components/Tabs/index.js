@@ -4,7 +4,6 @@ import { observable } from 'mobx';
 
 import './styles.css';
 
-
 class TabListContextState {
     @observable tabs = new Set();
     @observable activeTabId = null;
@@ -19,7 +18,6 @@ class TabListContextState {
     };
 }
 
-
 const TabsContext = React.createContext();
 
 const TabList = observer(({ onTabClick = null, context = null, children }) => {
@@ -31,24 +29,16 @@ const TabList = observer(({ onTabClick = null, context = null, children }) => {
 
     return (
         <div>
-            <TabsContext.Provider value={ contextData }>
-                { children }
-            </TabsContext.Provider>
+            <TabsContext.Provider value={contextData}>{children}</TabsContext.Provider>
         </div>
     );
 });
 
 const Tab = observer(
-    ({
-        title = '',
-        disabled = false,
-        children = null,
-        id = null,
-        ...restProps
-    }) => {
+    ({ title = '', disabled = false, children = null, id = null, ...restProps }) => {
         const contextData = useContext(TabsContext);
 
-        const [ tab ] = useState({
+        const [tab] = useState({
             id,
             title,
             disabled,

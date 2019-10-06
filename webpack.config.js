@@ -18,9 +18,7 @@ const hashType = dev ? '[hash]' : '[contenthash]';
 let devPlugins = [];
 let prodPlugins = [];
 if (dev) {
-    devPlugins = [
-        new webpack.HotModuleReplacementPlugin(),
-    ];
+    devPlugins = [new webpack.HotModuleReplacementPlugin()];
 }
 if (!dev) {
     prodPlugins = [
@@ -28,20 +26,19 @@ if (!dev) {
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: `[name].${ hashType }.css`,
-            chunkFilename: `[id].${ hashType }.css`,
+            filename: `[name].${hashType}.css`,
+            chunkFilename: `[id].${hashType}.css`,
         }),
     ];
 }
 
-
 module.exports = {
     mode: dev ? 'development' : 'production',
     entry: {
-        bundle: [ './src/index.jsx' ],
+        bundle: ['./src/index.jsx'],
     },
     output: {
-        filename: `[name].${ hashType }.js`,
+        filename: `[name].${hashType}.js`,
         path: __dirname + '/dist',
         publicPath: '/',
     },
@@ -68,31 +65,14 @@ module.exports = {
 
     resolve: {
         alias: {
-            'react-dom': '@hot-loader/react-dom'
+            'react-dom': '@hot-loader/react-dom',
         },
-        extensions: [
-            '.js',
-            '.jsx',
-            '.json',
-        ],
-        modules: [
-            path.resolve('./src'),
-            path.resolve('./node_modules'),
-        ],
+        extensions: ['.js', '.jsx', '.json'],
+        modules: [path.resolve('./src'), path.resolve('./node_modules')],
     },
 
     module: {
         rules: [
-            {
-                enforce: 'pre',
-                test: /\.jsx?$/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
-                options: {
-                    fix: true,
-                    cache: true,
-                },
-            },
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
@@ -109,12 +89,12 @@ module.exports = {
             {
                 enforce: 'pre',
                 test: /\.js$/,
-                loaders: dev ? [ 'source-map-loader' ] : [],
+                loaders: dev ? ['source-map-loader'] : [],
             },
 
             {
                 test: /\.json$/,
-                loaders: [ 'json' ],
+                loaders: ['json'],
             },
             {
                 test: /\.module\.(c|sa|sc)ss$/,
@@ -127,7 +107,7 @@ module.exports = {
                             modules: {
                                 localIdentName: '[path]___[name]__[local]___[hash:base64:5]',
                             },
-                            sourceMap: dev
+                            sourceMap: dev,
                         },
                     },
                     'resolve-url-loader',
@@ -138,9 +118,7 @@ module.exports = {
                             // Prefer `dart-sass`
                             implementation: require('sass'),
                             sassOptions: {
-                                includePaths: [
-                                    path.resolve(__dirname, "./src"),
-                                ]
+                                includePaths: [path.resolve(__dirname, './src')],
                             },
                         },
                     },
@@ -155,7 +133,7 @@ module.exports = {
                         loader: 'css-loader',
                         options: {
                             importLoaders: 3,
-                            sourceMap: dev
+                            sourceMap: dev,
                         },
                     },
                     'resolve-url-loader',
@@ -166,9 +144,7 @@ module.exports = {
                             // Prefer `dart-sass`
                             implementation: require('sass'),
                             sassOptions: {
-                                includePaths: [
-                                    path.resolve(__dirname, "./src"),
-                                ]
+                                includePaths: [path.resolve(__dirname, './src')],
                             },
                         },
                     },
@@ -177,7 +153,7 @@ module.exports = {
             {
                 test: /\.svg$/,
                 exclude: /\.file\.svg$/,
-                use: [ 'raw-loader' ],
+                use: ['raw-loader'],
             },
             {
                 test: /\.(png|jpg|jpeg|gif|webp|file\.svg)$/,
@@ -204,7 +180,7 @@ module.exports = {
             template: 'index.html',
         }),
         new ScriptExtHtmlWebpackPlugin({
-            defaultAttribute: 'defer'
+            defaultAttribute: 'defer',
         }),
         new CopyWebpackPlugin([
             {
@@ -214,7 +190,7 @@ module.exports = {
             {
                 from: './src/move_this_static_files_to_root_dir',
                 to: './',
-            }
+            },
         ]),
         new CaseSensitivePathsPlugin(),
         new DuplicatesPlugin(),

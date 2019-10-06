@@ -1,16 +1,12 @@
 import { useState } from 'react';
 
-
-class ReactFunctionalComponentState {
-
-}
-
+class ReactFunctionalComponentState {}
 
 /**
  * @returns {ReactFunctionalComponentState}
  */
 export const useLocalState = () => {
-    const [ state ] = useState(() => new ReactFunctionalComponentState());
+    const [state] = useState(() => new ReactFunctionalComponentState());
 
     return state;
 };

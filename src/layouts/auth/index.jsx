@@ -11,11 +11,9 @@ export default function AuthLayout({ children }) {
     return (
         <>
             <OfflineOverlay />
-            <div className={ styles.wrap }>
-                <div className={ styles.content_holder }>
-                    <div>
-                        { children }
-                    </div>
+            <div className={styles.wrap}>
+                <div className={styles.content_holder}>
+                    <div>{children}</div>
                 </div>
             </div>
         </>

@@ -9,10 +9,7 @@ export default class {
             this.showOverlay = onlineState.online === false;
         });
 
-        const disposer = reaction(
-            () => [ onlineState.online ],
-            checkOverlay,
-        );
+        const disposer = reaction(() => [onlineState.online], checkOverlay);
 
         checkOverlay();
 

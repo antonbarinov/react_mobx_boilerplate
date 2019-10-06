@@ -13,8 +13,7 @@ function handleInitialFetching() {
             // Hide global preloader
             document.getElementById('preloader').classList.add('hidden');
         }, 10);
-    }
-    else {
+    } else {
         // Show global preloader
         document.getElementById('preloader').classList.remove('hidden');
     }

@@ -28,8 +28,8 @@ export default class LoadingAnimationOverlay extends BaseComponent {
 
     render() {
         return (
-            <div className={ styles.overlay }>
-                <span dangerouslySetInnerHTML={ { __html: svg } } />
+            <div className={styles.overlay}>
+                <span dangerouslySetInnerHTML={{ __html: svg }} />
             </div>
         );
     }

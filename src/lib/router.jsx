@@ -21,10 +21,8 @@ function exec(re, str, keys = []) {
     return result;
 }
 
-
 window.addEventListener('popstate', () => currentRoute.setCurrentRoute());
 window.addEventListener('hashchange', () => currentRoute.setCurrentRoute());
-
 
 export function redirect(to, replace = false, title = '') {
     const currentFullPath = window.location.href.substr(window.location.origin.length);
@@ -34,14 +32,12 @@ export function redirect(to, replace = false, title = '') {
 
     if (replace) {
         history.replaceState({}, title, to);
-    }
-    else {
+    } else {
         history.pushState({}, title, to);
     }
 
     currentRoute.setCurrentRoute();
 }
-
 
 class CurrentRoute {
     @observable currentLocation = {
@@ -72,16 +68,14 @@ class CurrentRoute {
     @action setCurrentRoute = () => {
         const windowLocation = window.location;
 
-        let path,
-            fullPath;
+        let path, fullPath;
 
         if (this.hashMode) {
             const hashPath = windowLocation.hash.substr(1);
             const parsedURL = new URL(hashPath, windowLocation.origin);
             path = parsedURL.pathname;
             fullPath = hashPath;
-        }
-        else {
+        } else {
             path = windowLocation.pathname;
             fullPath = path + windowLocation.search;
         }
@@ -100,7 +94,6 @@ class CurrentRoute {
     };
 }
 
-
 export const currentRoute = new CurrentRoute();
 
 let globalRoutersCount = 0;
@@ -112,47 +105,52 @@ let globalRoutersCount = 0;
  * hashMode - hash router instead of regular url's
  */
 export function Router({ routes, global, hashMode }) {
-    const [ state ] = useState(() => new class {
-        @observable.ref currentComponent = null;
-    });
+    const [state] = useState(
+        () => new (class {
+                @observable.ref currentComponent = null;
+        })(),
+    );
 
-    const navigate = useCallback(action(() => {
-        let result = routes[''] || routes['*'] || null;
+    const navigate = useCallback(
+        action(() => {
+            let result = routes[''] || routes['*'] || null;
 
-        let isRouteFound = false;
+            let isRouteFound = false;
 
-        const { path } = currentRoute.currentLocation;
+            const { path } = currentRoute.currentLocation;
 
-        for (const route in routes) {
-            if (!routes.hasOwnProperty(route)) continue;
-            if (route === '' || route === '*') continue;
-            const component = routes[route];
+            for (const route in routes) {
+                if (!routes.hasOwnProperty(route)) continue;
+                if (route === '' || route === '*') continue;
+                const component = routes[route];
 
-            const keys = [];
-            const regexp = pathToRegexp(route, keys);
-            const res = exec(regexp, path, keys);
+                const keys = [];
+                const regexp = pathToRegexp(route, keys);
+                const res = exec(regexp, path, keys);
 
-            if (res) {
-                isRouteFound = true;
-                result = component;
+                if (res) {
+                    isRouteFound = true;
+                    result = component;
 
-                // Set global route params only from global router, not from local
-                if (global) {
-                    mutateObject(currentRoute.routeParams, res);
-                    currentRoute.currentRegExp = regexp;
+                    // Set global route params only from global router, not from local
+                    if (global) {
+                        mutateObject(currentRoute.routeParams, res);
+                        currentRoute.currentRegExp = regexp;
+                    }
+
+                    break;
                 }
-
-                break;
             }
-        }
 
-        if (!isRouteFound) {
-            mutateObject(currentRoute.routeParams, {});
-            currentRoute.currentRegExp = pathToRegexp(currentRoute.currentLocation.path, []);
-        }
+            if (!isRouteFound) {
+                mutateObject(currentRoute.routeParams, {});
+                currentRoute.currentRegExp = pathToRegexp(currentRoute.currentLocation.path, []);
+            }
 
-        state.currentComponent = result;
-    }), []);
+            state.currentComponent = result;
+        }),
+        [],
+    );
 
     useEffect(() => {
         if (global) globalRoutersCount++;
@@ -179,16 +177,14 @@ export function Router({ routes, global, hashMode }) {
             if (hashMode && window.location.hash === '') window.location.hash = '/';
             currentRoute.setCurrentRoute();
         });
-    }, [ hashMode ]);
+    }, [hashMode]);
 
     useState(() => navigate());
-
 
     return state.currentComponent;
 }
 
 Router = observer(Router);
-
 
 /**
  * Props explanation:
@@ -197,26 +193,35 @@ Router = observer(Router);
  * dontIgnoreHash - Don't ignore hash when exact active
  * grabActive - callback function that tells is link active or not
  */
-export function Link({ to, exact, dontIgnoreHash, grabActive, activeClass, children, className, ...restProps }) {
-    const [ state ] = useState(() => new class {
-        @observable active = false;
-    });
+export function Link({
+    to,
+    exact,
+    dontIgnoreHash,
+    grabActive,
+    activeClass,
+    children,
+    className,
+    ...restProps
+}) {
+    const [state] = useState(
+        () => new (class {
+                @observable active = false;
+        })(),
+    );
 
-    useEffect(() => reaction(
-        () => {
-            const { currentRegExp, currentLocation } = currentRoute;
+    useEffect(
+        () => reaction(
+            () => {
+                const { currentRegExp, currentLocation } = currentRoute;
 
-            return [
-                to,
-                exact,
-                currentLocation,
-                currentRegExp,
-            ];
-        },
-        () => {
-            calcActive();
-        },
-    ), []);
+                return [to, exact, currentLocation, currentRegExp];
+            },
+            () => {
+                calcActive();
+            },
+        ),
+        [],
+    );
 
     const handleClick = useCallback((e) => {
         e.preventDefault();
@@ -224,27 +229,28 @@ export function Link({ to, exact, dontIgnoreHash, grabActive, activeClass, child
         redirect(to);
     }, []);
 
-    const calcActive = useCallback(action(() => {
-        const { currentRegExp, currentLocation } = currentRoute;
+    const calcActive = useCallback(
+        action(() => {
+            const { currentRegExp, currentLocation } = currentRoute;
 
-        let active = false;
-        if (exact) {
-            if (dontIgnoreHash && !currentRoute.hashMode) {
-                active = to === currentLocation.fullPath + currentLocation.location.hash;
+            let active = false;
+            if (exact) {
+                if (dontIgnoreHash && !currentRoute.hashMode) {
+                    active = to === currentLocation.fullPath + currentLocation.location.hash;
+                } else {
+                    active = to === currentLocation.fullPath;
+                }
+            } else if (currentRegExp && currentRegExp.exec(to)) {
+                active = true;
             }
-            else {
-                active = to === currentLocation.fullPath;
-            }
-        }
-        else if (currentRegExp && currentRegExp.exec(to)) {
-            active = true;
-        }
 
-        if (active !== state.active) {
-            state.active = active;
-            grabActive && grabActive(active);
-        }
-    }), []);
+            if (active !== state.active) {
+                state.active = active;
+                grabActive && grabActive(active);
+            }
+        }),
+        [],
+    );
 
     useState(() => calcActive());
 
@@ -255,13 +261,13 @@ export function Link({ to, exact, dontIgnoreHash, grabActive, activeClass, child
 
     return (
         <a
-            { ...restProps }
-            className={ classNames }
-            href={ to }
-            data-active={ state.active }
-            onClick={ handleClick }
+            {...restProps}
+            className={classNames}
+            href={to}
+            data-active={state.active}
+            onClick={handleClick}
         >
-            { children }
+            {children}
         </a>
     );
 }

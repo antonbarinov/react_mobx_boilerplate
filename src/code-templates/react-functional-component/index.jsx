@@ -9,7 +9,7 @@ export default function ReactFunctionalComponent(props) {
     const state = useLocalState();
 
     return (
-        <div className={ styles.ComponentName }>
+        <div className={styles.ComponentName}>
             <h1>Hello world</h1>
         </div>
     );

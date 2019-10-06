@@ -12,21 +12,46 @@ import MainLayout from 'layouts/main';
 import AuthLayout from 'layouts/auth';
 
 const authorizationRoutes = {
-    '/login': <AuthLayout><LoginPage /></AuthLayout>,
-    '/signup': <AuthLayout><SignUpPage /></AuthLayout>,
+    '/login': (
+        <AuthLayout>
+            <LoginPage />
+        </AuthLayout>
+    ),
+    '/signup': (
+        <AuthLayout>
+            <SignUpPage />
+        </AuthLayout>
+    ),
 };
 
 const routes = {
-    '/': <MainLayout><MainPage /></MainLayout>,
-    '/page/:page': <MainLayout><MainPage /></MainLayout>,
+    '/': (
+        <MainLayout>
+            <MainPage />
+        </MainLayout>
+    ),
+    '/page/:page': (
+        <MainLayout>
+            <MainPage />
+        </MainLayout>
+    ),
     ...authorizationRoutes,
-    '/profile': <PrivateRoute><MainLayout><ProfilePage /></MainLayout></PrivateRoute>,
-    '': <MainLayout><NotFoundPage /></MainLayout>,
+    '/profile': (
+        <PrivateRoute>
+            <MainLayout>
+                <ProfilePage />
+            </MainLayout>
+        </PrivateRoute>
+    ),
+    '': (
+        <MainLayout>
+            <NotFoundPage />
+        </MainLayout>
+    ),
 };
 
-
 export default function Routes() {
-    return <Router global routes={ routes } />;
+    return <Router global routes={routes} />;
 }
 
 Routes = observer(Routes);

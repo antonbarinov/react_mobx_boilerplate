@@ -29,8 +29,7 @@ const respHandler = async (e) => {
 
         // Update main page cache
         if (e.request.mode === 'navigate') cache.put('/', res.clone()).catch(console.error);
-    }
-    catch (err) {
+    } catch (err) {
         res = await caches.match(e.request);
 
         // Return index page
@@ -46,7 +45,5 @@ const respHandler = async (e) => {
 self.addEventListener('fetch', async (e) => {
     if (e.request.method !== 'GET') return;
 
-    e.respondWith(
-        respHandler(e),
-    );
+    e.respondWith(respHandler(e));
 });

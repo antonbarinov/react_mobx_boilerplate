@@ -8,11 +8,9 @@ function updateOnline() {
 }
 updateOnline = action(updateOnline);
 
-
 class Online {
     @observable online = navigator.onLine;
 }
-
 
 const onlineState = new Online();
 

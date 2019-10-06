@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 
-
 export default function useOutSideClick(elemRef, cb) {
     useEffect(() => {
         const handleClick = (e) => {

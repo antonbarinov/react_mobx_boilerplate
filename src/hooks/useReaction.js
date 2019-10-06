@@ -1,7 +1,12 @@
 import { useEffect } from 'react';
 import { reaction } from 'mobx';
 
-export default function useReaction(reactionFunc, reactToFunc, debounce = 0, fireImmediately = false) {
+export default function useReaction(
+    reactionFunc,
+    reactToFunc,
+    debounce = 0,
+    fireImmediately = false,
+) {
     useEffect(() => {
         let index = 1;
         let timeout;
@@ -18,11 +23,12 @@ export default function useReaction(reactionFunc, reactToFunc, debounce = 0, fir
                     timeout = setTimeout(() => {
                         if (storedIndex === index) reactionFunc(data, reaction);
                     }, debounce);
-                }
-                else {
+                } else {
                     reactionFunc(data, reaction);
                 }
-            }, options);
+            },
+            options,
+        );
 
         return () => {
             clearTimeout(timeout);
