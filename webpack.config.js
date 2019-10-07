@@ -173,8 +173,11 @@ module.exports = {
 
     plugins: [
         new webpack.DefinePlugin({
-            PRODUCTION: JSON.stringify(dev === false),
-            NODE_ENV: JSON.stringify(NODE_ENV),
+            process: {
+                env: {
+                    NODE_ENV: JSON.stringify(NODE_ENV),
+                },
+            },
         }),
         new HtmlWebpackPlugin({
             template: 'index.html',

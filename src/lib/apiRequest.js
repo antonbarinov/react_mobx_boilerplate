@@ -7,9 +7,7 @@ import userState from 'globalState/user';
 let apiUrl = 'http://localhost:3010';
 
 // Environment api path
-if (NODE_ENV === 'production') {
-    apiUrl = 'http://localhost:3010';
-} else if (NODE_ENV === 'staging') {
+if (process.env.NODE_ENV === 'production') {
     apiUrl = 'http://localhost:3010';
 }
 
