@@ -25,9 +25,9 @@ export class BaseComponent extends React.PureComponent {
         }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         for (const { callback, reactOnComponentDidUpdate } of this.__effects) {
-            if (reactOnComponentDidUpdate) callback(false, true);
+            if (reactOnComponentDidUpdate) callback(false, true, prevProps, prevState);
         }
     }
 
