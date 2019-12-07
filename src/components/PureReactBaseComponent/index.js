@@ -12,7 +12,7 @@ function isEqual(one = [], two = []) {
     return true;
 }
 
-export class PureReactBaseComponent extends React.Component {
+export class PureReactBaseComponent extends React.PureComponent {
     state = {};
     __effects = [];
     __cleanupEffects = [];
