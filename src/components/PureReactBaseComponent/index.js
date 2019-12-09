@@ -12,30 +12,36 @@ function isEqual(one = [], two = []) {
     return true;
 }
 
+const invalidReactToMessage = 'reactTo (second argument) must be function that return array';
+
 export class PureReactBaseComponent extends React.PureComponent {
     state = {};
     __effects = [];
     __cleanupEffects = [];
 
-    useEffect = (callback, getReactions) => {
-        if (typeof getReactions !== 'function') {
-            throw new Error('getReactions must be function that return array');
+    useEffect = (callback, reactTo) => {
+        if (reactTo !== undefined && typeof reactTo !== 'function') {
+            throw new Error(invalidReactToMessage);
         }
 
         if (typeof callback !== 'function') {
             throw new Error('Only functions can be passed into useEffect()');
         }
 
-        const reactions = getReactions();
-        if (!Array.isArray(reactions)) {
-            throw new Error('getReactions must be function that return array');
-        }
-
-        const effect = {
+        let effect = {
             callback,
-            getReactions,
-            lastReactions: [...reactions],
+            reactTo,
         };
+
+        // If we specify what we need react to when componentDidUpdate
+        if (reactTo) {
+            const reactions = reactTo();
+            if (!Array.isArray(reactions)) {
+                throw new Error(invalidReactToMessage);
+            }
+
+            effect.lastReactions = reactions;
+        }
 
         this.__effects.push(effect);
     };
@@ -48,9 +54,13 @@ export class PureReactBaseComponent extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState) {
         for (const effect of this.__effects) {
-            const reactions = effect.getReactions();
-            if (!isEqual(effect.lastReactions, reactions)) {
-                effect.lastReactions = reactions;
+            if (effect.reactTo) {
+                const reactions = effect.reactTo();
+                if (!isEqual(effect.lastReactions, reactions)) {
+                    effect.lastReactions = reactions;
+                    effect.callback(false, true, prevProps, prevState);
+                }
+            } else {
                 effect.callback(false, true, prevProps, prevState);
             }
         }
