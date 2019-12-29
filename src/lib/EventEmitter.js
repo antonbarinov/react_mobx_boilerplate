@@ -1,6 +1,7 @@
 export class EventEmitter {
     constructor() {
         this.events = {};
+        this.logEmits = true;
     }
 
     // eventName can be also array of event names
@@ -10,6 +11,14 @@ export class EventEmitter {
 
         for (const eventName of eventNames) {
             const events = this.events[eventName];
+
+            if (this.logEmits) {
+                let subscribersCount = 0;
+                if (events) subscribersCount = events.size;
+
+                console.log(`EventEmitter emits: "${eventName}", subscribers: ${subscribersCount}`);
+            }
+
             if (events) {
                 events.forEach((fn) => {
                     fn.call(null, ...restParams);
