@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class BaseComponent extends React.PureComponent {
+export class BaseComponent extends React.Component {
     __effects = [];
     __cleanupEffects = [];
 
