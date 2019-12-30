@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { BaseComponent } from 'components/BaseComponent';
+import { EnhancedComponent } from 'components/EnhancedComponent';
 import PropTypes from 'prop-types';
 import {
     formFieldsUniversalHandleChange,
@@ -10,7 +10,7 @@ import {
 import styles from './styles.module.scss';
 
 @observer
-export default class FormTextarea extends BaseComponent {
+export default class FormTextarea extends EnhancedComponent {
     elem = React.createRef();
 
     constructor(props) {
@@ -20,7 +20,7 @@ export default class FormTextarea extends BaseComponent {
             this.elem = props.innerRef;
         }
 
-        this.useEffect(this.computeTextareaHeightEffect, true);
+        this.useEffect(this.computeTextareaHeightEffect);
     }
 
     computeTextareaHeightEffect = () => {

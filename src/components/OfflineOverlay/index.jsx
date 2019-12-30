@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { BaseComponent } from 'components/BaseComponent';
+import { EnhancedComponent } from 'components/EnhancedComponent';
 
 import styles from './styles.module.scss';
 
@@ -9,7 +9,7 @@ import State from './state';
 const localState = new State();
 
 @observer
-export default class OfflineOverlay extends BaseComponent {
+export default class OfflineOverlay extends EnhancedComponent {
     constructor(props) {
         super(props);
 

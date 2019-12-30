@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { BaseComponent } from 'components/BaseComponent';
+import { EnhancedComponent } from 'components/EnhancedComponent';
 
 import styles from './styles.module.scss';
 
 import State from './state';
 
 @observer
-export default class ReactClassComponent extends BaseComponent {
+export default class ReactClassComponent extends EnhancedComponent {
     state = new State(); // Or init new State outside of class if you need to save state after destructing component
 
     constructor(props) {

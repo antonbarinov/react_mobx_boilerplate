@@ -2,12 +2,12 @@ import * as React from 'react';
 import { observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import LoadingAnimation from 'components/LoadingAntimation';
-import { BaseComponent } from 'components/BaseComponent';
+import { EnhancedComponent } from 'components/EnhancedComponent';
 
 import styles from './styles.module.scss';
 
 @observer
-export default class FormButton extends BaseComponent {
+export default class FormButton extends EnhancedComponent {
     getContent = () => {
         const { loading } = this.props;
 

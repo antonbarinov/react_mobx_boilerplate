@@ -12,13 +12,39 @@ function isEqual(one = [], two = []) {
     return true;
 }
 
-const invalidReactToMessage = 'reactTo (second argument) must be function that return array';
+const invalidReactToMessage = `reactTo (second argument) must be function that return array or just don't pass this argument`;
 
-export class PureReactBaseComponent extends React.PureComponent {
+export class EnhancedComponent extends React.Component {
     state = {};
     __effects = [];
     __cleanupEffects = [];
+    __lifeCycles = {
+        update: [],
+        mount: [],
+        unmount: [],
+    };
 
+    constructor(props) {
+        super(props);
+    }
+
+    /**
+     * useScroll callback function
+     * @callback useEffectCallback
+     * @param {boolean} mount
+     * @param {boolean} update
+     * @param {Object} prevProps
+     * @param {Object} prevState
+     */
+    /**
+     * reactTo callback function
+     * @callback reactToCallback
+     */
+    /**
+     * useEffect
+     * @param {useEffectCallback} callback
+     * @param {reactToCallback} [reactTo]
+     */
     useEffect = (callback, reactTo) => {
         if (reactTo !== undefined && typeof reactTo !== 'function') {
             throw new Error(invalidReactToMessage);
@@ -46,8 +72,50 @@ export class PureReactBaseComponent extends React.PureComponent {
         this.__effects.push(effect);
     };
 
+    /**
+     * onUpdate callback function
+     * @callback onUpdateCallback
+     * @param {Object} prevProps
+     * @param {Object} prevState
+     */
+    /**
+     * onUpdate
+     * @param {onUpdateCallback} callback
+     */
+    onUpdate = (callback) => {
+        this.__lifeCycles.update.push(callback);
+    };
+
+    /**
+     * onMount callback function
+     * @callback onMountCallback
+     */
+    /**
+     * onMount
+     * @param {onMountCallback} callback
+     */
+    onMount = (callback) => {
+        this.__lifeCycles.mount.push(callback);
+    };
+
+    /**
+     * onUnmount callback function
+     * @callback onUnmountCallback
+     */
+    /**
+     * onUnmount
+     * @param {onUnmountCallback} callback
+     */
+    onUnmount = (callback) => {
+        this.__lifeCycles.unmount.push(callback);
+    };
+
     componentWillUnmount() {
         for (const callback of this.__cleanupEffects) {
+            callback();
+        }
+
+        for (const callback of this.__lifeCycles.unmount) {
             callback();
         }
     }
@@ -64,12 +132,20 @@ export class PureReactBaseComponent extends React.PureComponent {
                 effect.callback(false, true, prevProps, prevState);
             }
         }
+
+        for (const callback of this.__lifeCycles.update) {
+            callback(prevProps, prevState);
+        }
     }
 
     componentDidMount() {
         for (const { callback } of this.__effects) {
             const result = callback(true, false);
             if (typeof result === 'function') this.__cleanupEffects.push(result);
+        }
+
+        for (const callback of this.__lifeCycles.mount) {
+            callback();
         }
     }
 }

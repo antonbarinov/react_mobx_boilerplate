@@ -3,10 +3,10 @@ import * as React from 'react';
 import { reaction } from 'mobx';
 import userState from 'globalState/user';
 import { redirect } from 'lib/router';
-import { BaseComponent } from 'components/BaseComponent';
+import { EnhancedComponent } from 'components/EnhancedComponent';
 
 @observer
-export default class PrivateRoute extends BaseComponent {
+export default class PrivateRoute extends EnhancedComponent {
     constructor(props) {
         super(props);
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { BaseComponent } from 'components/BaseComponent';
+import { EnhancedComponent } from 'components/EnhancedComponent';
 import PropTypes from 'prop-types';
 import {
     formFieldsUniversalHandleChange,
@@ -10,7 +10,7 @@ import {
 import styles from './styles.module.scss';
 
 @observer
-export default class FormInput extends BaseComponent {
+export default class FormInput extends EnhancedComponent {
     handleChange = formFieldsUniversalHandleChange.bind(this);
 
     render() {

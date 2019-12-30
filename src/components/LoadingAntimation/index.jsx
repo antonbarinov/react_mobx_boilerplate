@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { BaseComponent } from 'components/BaseComponent';
+import { EnhancedComponent } from 'components/EnhancedComponent';
 
 import styles from './styles.module.scss';
 
 @observer
-export default class LoadingAnimation extends BaseComponent {
+export default class LoadingAnimation extends EnhancedComponent {
     render() {
         return (
             <div className={styles.lds_ellipsis}>
