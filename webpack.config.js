@@ -151,8 +151,7 @@ module.exports = {
                 ],
             },
             {
-                test: /\.svg$/,
-                exclude: /\.file\.svg$/,
+                test: /\?raw$/,
                 use: ['raw-loader'],
             },
             {
