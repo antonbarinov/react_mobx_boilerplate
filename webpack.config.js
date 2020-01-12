@@ -155,7 +155,7 @@ module.exports = {
                 use: ['raw-loader'],
             },
             {
-                test: /\.(png|jpg|jpeg|gif|webp|file\.svg)$/,
+                test: /\.(png|jpg|jpeg|gif|webp|svg)$/,
                 use: [
                     {
                         loader: 'file-loader',
